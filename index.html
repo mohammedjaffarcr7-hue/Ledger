@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daftar</title>
+<meta name="description" content="Daftar: your personal money ledger.">
+<meta name="theme-color" content="#F3F4F7">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Daftar">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<!-- SIGN IN -->
+<div class="auth" id="auth" hidden>
+  <div class="auth-card">
+    <img class="auth-logo" src="icons/icon-192.png" alt="" width="72" height="72">
+    <h1 class="auth-brand"><span data-brand>Daftar</span> <span class="ar">دفتر</span></h1>
+    <h2 id="authH">Welcome back</h2>
+    <p class="hint" id="authSub">Sign in to your ledger.</p>
+    <form id="authForm" class="fields" novalidate autocomplete="on">
+      <div class="f full" id="authNameWrap" hidden><label for="aFull" data-i18n="fullName">Full name</label><input id="aFull" autocomplete="name"></div>
+      <div class="f full"><label for="aEmail" data-i18n="email">Email</label><input id="aEmail" type="email" inputmode="email" autocomplete="email" dir="ltr"></div>
+      <div class="f full" id="authPassWrap"><label for="aPass" data-i18n="password">Password</label><input id="aPass" type="password" autocomplete="current-password" dir="ltr"></div>
+      <div class="err" id="authErr" hidden></div>
+      <button class="btn primary auth-go" type="submit" id="authGo">Sign in</button>
+      <button class="btn ghost" type="button" id="authForgot" data-i18n="forgot">Forgot password?</button>
+      <button class="btn" type="button" id="authSwap">New here? Create an account</button>
+      <button class="btn" type="button" id="authDemo" hidden data-i18n="tryDemo">Try the demo</button>
+    </form>
+    <button class="btn lang auth-lang" type="button" id="authLang"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span data-i18n="langName">العربية</span></button>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><h1 id="brandMain">Daftar</h1><span class="ar" id="brandAlt">دفتر</span></div>
+    <nav class="tabs" data-i18n-aria="sections" aria-label="Sections">
+      <button class="tab" type="button" data-view="overview" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span data-i18n="overview">Overview</span></button>
+      <button class="tab" type="button" data-view="ledger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 9h16M4 14h16M10 4v16"/></svg><span data-i18n="ledger">Ledger</span></button>
+      <button class="tab" type="button" data-view="accounts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6.5 15h4"/></svg><span data-i18n="accounts">Accounts</span></button>
+      <button class="tab" type="button" data-view="people">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.3-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg><span data-i18n="debts">Debts</span></button>
+    </nav>
+    <button class="btn lang" type="button" id="langBtn" data-i18n-aria="switchLang" aria-label="Switch language">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span id="langLbl">العربية</span></button>
+    <button class="btn primary" type="button" id="newTop" data-i18n="newEntryBtn">+ New entry</button>
+    <button class="me-btn" type="button" id="meBtn" aria-label="My account">?</button>
+  </div>
+</header>
+
+<main>
+  <!-- OVERVIEW -->
+  <section class="page" id="v-overview">
+    <div class="banner" data-banner hidden></div>
+    <div class="page-h">
+      <div><div class="sub hello-date" id="helloDate"></div><h2 id="helloH">Overview</h2></div>
+    </div>
+    <div id="balGrid"></div>
+    <div class="ov-grid">
+      <div class="stack">
+        <div class="card">
+          <div class="card-h"><h3 data-i18n="thisMonth">This month</h3>
+            <div class="monthnav" data-i18n-aria="month" aria-label="Month">
+              <button type="button" data-m="-1" data-i18n-aria="prevMonth" aria-label="Previous month">‹</button>
+              <div class="label" data-monthlabel>—</div>
+              <button type="button" data-m="1" data-i18n-aria="nextMonth" aria-label="Next month">›</button>
+            </div>
+          </div>
+          <div class="card-b" id="mStats"></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3 data-i18n="recent">Recent activity</h3><button class="btn ghost small" type="button" data-go="ledger" data-i18n="openLedger">Open ledger →</button></div>
+          <div class="card-b"><div class="recent" id="recent"></div></div>
+        </div>
+      </div>
+      <div class="stack">
+        <div class="card">
+          <div class="card-h"><h3 data-i18n="debts">Debts</h3><button class="btn ghost small" type="button" data-go="people" data-i18n="viewAll">View all →</button></div>
+          <div class="card-b" id="ovDebts"></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3 data-i18n="accounts">Accounts</h3><button class="btn ghost small" type="button" data-go="accounts" data-i18n="manage">Manage →</button></div>
+          <div class="card-b"><div class="wstrip" id="ovAccts"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3 data-i18n="byCategory">Spending by category</h3><span class="hint" data-monthlabel></span></div>
+          <div class="card-b"><div class="bd" id="breakdown"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEDGER -->
+  <section class="page" id="v-ledger" hidden>
+    <div class="banner" data-banner hidden></div>
+    <div class="page-h">
+      <div><h2 data-i18n="ledgerTitle">Account ledger</h2><div class="sub" data-i18n="ledgerSub">Every transaction per account, with a running balance. Debit is money in, credit is money out.</div></div>
+      <button class="btn" type="button" id="exportBtn" data-i18n="export">Export CSV</button>
+    </div>
+    <div class="card">
+      <div class="filters">
+        <div class="fl acct"><label for="lAcct" data-i18n="account">Account</label><select id="lAcct"></select></div>
+        <div class="fl"><label for="lFrom" data-i18n="from">From</label><input type="date" id="lFrom"></div>
+        <div class="fl"><label for="lTo" data-i18n="to">To</label><input type="date" id="lTo"></div>
+        <div class="fl"><label for="lType" data-i18n="voucherType">Voucher type</label>
+          <select id="lType"><option value="" data-i18n="all">All</option><option value="income" data-i18n="t_income">Income</option><option value="expense" data-i18n="t_expense">Expense</option><option value="transfer" data-i18n="t_transfer">Transfer</option><option value="exchange" data-i18n="t_exchange">Exchange</option><option value="debt" data-i18n="t_debt">Debt</option></select></div>
+        <div class="fl grow"><label for="lQ" data-i18n="search">Search</label><input type="search" id="lQ" data-i18n-ph="searchPh" placeholder="Note, category or account"></div>
+      </div>
+      <div class="filters" style="padding-top:0">
+        <div class="ranges" id="ranges">
+          <button type="button" data-r="month" data-i18n="r_month">This month</button>
+          <button type="button" data-r="last" data-i18n="r_last">Last month</button>
+          <button type="button" data-r="3m" data-i18n="r_3m">Last 3 months</button>
+          <button type="button" data-r="year" data-i18n="r_year">This year</button>
+          <button type="button" data-r="all" data-i18n="r_all">All time</button>
+        </div>
+      </div>
+      <div id="ledgerOut"></div>
+    </div>
+  </section>
+
+  <!-- ACCOUNTS -->
+  <section class="page" id="v-accounts" hidden>
+    <div class="banner" data-banner hidden></div>
+    <div class="page-h">
+      <div><h2 data-i18n="accounts">Accounts</h2><div class="sub" data-i18n="accSub">Cash, cards and digital wallets. Tap a card to see its ledger.</div></div>
+      <button class="btn primary" type="button" data-addacct data-i18n="addAccountBtn">+ Add account</button>
+    </div>
+    <div id="accPage"></div>
+  </section>
+
+  <!-- DEBTS -->
+  <section class="page" id="v-people" hidden>
+    <div class="banner" data-banner hidden></div>
+    <div class="page-h">
+      <div><h2 data-i18n="debts">Debts</h2><div class="sub" data-i18n="debtsSub">Who owes you, and whom you owe.</div></div>
+      <button class="btn primary" type="button" data-adddebt data-i18n="newDebtBtn">+ New debt</button>
+    </div>
+    <div id="pplOut"></div>
+  </section>
+
+</main>
+
+<button class="fab" type="button" id="fab" data-i18n-aria="newEntry" aria-label="New entry">+</button>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<!-- ENTRY SHEET -->
+<aside class="sheet" id="entrySheet" hidden role="dialog" aria-modal="true" aria-labelledby="entryH">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-h"><h2 id="entryH">New entry</h2><button class="xbtn" type="button" data-close data-i18n-aria="close" aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <div class="seg" role="group" data-i18n-aria="entryType" aria-label="Entry type">
+      <button type="button" data-t="expense" aria-pressed="true" data-i18n="t_expense">Expense</button>
+      <button type="button" data-t="income" aria-pressed="false" data-i18n="t_income">Income</button>
+      <button type="button" data-t="transfer" aria-pressed="false" data-i18n="t_transfer">Transfer</button>
+      <button type="button" data-t="exchange" aria-pressed="false" data-i18n="t_exchange">Exchange</button>
+      <button type="button" data-t="debt" aria-pressed="false" data-i18n="t_debt">Debt</button>
+    </div>
+    <form id="entryForm" autocomplete="off" class="fields" novalidate>
+      <div class="side-h pay" id="payH" hidden data-i18n="youPay">You pay</div>
+      <div class="side-h recv" id="recvH" hidden data-i18n="youReceive">You receive</div>
+      <div class="f full" id="dirWrap" hidden>
+        <div class="dirs" id="dirs" role="group" data-i18n-aria="t_debt" aria-label="Debt">
+          <button type="button" data-dir="lent" aria-pressed="true" data-i18n="d_lent">I lent</button>
+          <button type="button" data-dir="borrowed" aria-pressed="false" data-i18n="d_borrowed">I borrowed</button>
+          <button type="button" data-dir="collected" aria-pressed="false" data-i18n="d_collected">They paid me back</button>
+          <button type="button" data-dir="repaid" aria-pressed="false" data-i18n="d_repaid">I paid back</button>
+        </div>
+      </div>
+      <div class="f full" id="personWrap" hidden>
+        <label for="fPerson" data-i18n="person">Person</label>
+        <select id="fPerson"></select>
+        <input id="fPersonNew" data-i18n-ph="personNewPh" placeholder="Name, e.g. Ali" hidden>
+      </div>
+      <div class="f full" id="amtWrap">
+        <label for="fAmount" id="amountLbl">Amount</label>
+        <input id="fAmount" class="amount-in" inputmode="decimal" placeholder="0" dir="ltr">
+      </div>
+      <div class="f" id="accWrap">
+        <label for="fAccount" id="accLbl">From account</label>
+        <select id="fAccount"></select>
+      </div>
+      <div class="f" id="toWrap" hidden>
+        <label for="fTo" id="toLbl">To account</label>
+        <select id="fTo"></select>
+      </div>
+      <div class="f" id="catWrap">
+        <span class="flabel" data-i18n="category">Category</span>
+        <div class="catgrid" id="catGrid" role="radiogroup" data-i18n-aria="category" aria-label="Category"></div>
+        <label for="fCat" class="sr" data-i18n="category">Category</label>
+        <input id="fCat" list="catList" placeholder="Food" hidden>
+        <datalist id="catList"></datalist>
+      </div>
+      <div class="f" id="curWrap" hidden>
+        <label for="fCur" data-i18n="currency">Currency</label>
+        <select id="fCur"><option>IQD</option><option>USD</option><option>GBP</option><option>EUR</option><option>TRY</option><option>AED</option></select>
+      </div>
+      <div class="f full" id="toAmtWrap" hidden>
+        <label for="fToAmt" id="toAmtLbl">Amount received</label>
+        <input id="fToAmt" class="num" inputmode="decimal" placeholder="0" dir="ltr">
+      </div>
+      <div class="f full" id="rateWrap" hidden>
+        <label for="fRate" id="rateLbl">Exchange rate</label>
+        <input id="fRate" class="num" inputmode="decimal" data-i18n-ph="rate" placeholder="Rate" dir="ltr">
+        <span class="hint" id="rateHint"></span>
+      </div>
+      <div class="f">
+        <label for="fDate" data-i18n="date">Date</label>
+        <div class="dq" id="dateQuick"><button type="button" class="pk" data-dq="0" data-i18n="dqToday">Today</button><button type="button" class="pk" data-dq="1" data-i18n="dqYest">Yesterday</button><input id="fDate" type="date" aria-label="Date"></div>
+      </div>
+      <div class="f full">
+        <label for="fNote" data-i18n="note">Note</label>
+        <input id="fNote" data-i18n-ph="notePh" placeholder="Lunch at the cafeteria">
+      </div>
+      <div class="f full">
+        <div class="err" id="formErr" hidden></div>
+        <div class="actions">
+          <button class="btn primary" type="submit" id="saveBtn">Add expense</button>
+          <button class="btn danger" type="button" id="delEntry" hidden data-i18n="delete">Delete</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</aside>
+
+<!-- ACCOUNT SHEET -->
+<aside class="sheet" id="acctSheet" hidden role="dialog" aria-modal="true" aria-labelledby="acctH">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-h"><h2 id="acctH">New account</h2><button class="xbtn" type="button" data-close data-i18n-aria="close" aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <div class="presets" id="presets">
+      <span class="lbl" data-i18n="quickAdd">Quick add</span>
+      <div class="chips" id="chips"></div>
+    </div>
+    <form id="acctForm" autocomplete="off" class="fields" novalidate>
+      <div class="f full"><label for="aName" data-i18n="accName">Account name</label><input id="aName" data-i18n-ph="accNamePh" placeholder="Bank account"></div>
+      <div class="f"><label for="aKind" data-i18n="type">Type</label>
+        <select id="aKind"><option value="Cash">Cash</option><option value="Bank card">Bank card</option><option value="Prepaid card">Prepaid card</option><option value="Digital wallet">Digital wallet</option><option value="Savings">Savings</option><option value="Other">Other</option></select></div>
+      <div class="f"><label for="aCur" data-i18n="currency">Currency</label>
+        <select id="aCur"><option>IQD</option><option>USD</option><option>GBP</option><option>EUR</option><option>TRY</option><option>AED</option></select></div>
+      <div class="f full"><label for="aOpen" data-i18n="openingBal">Opening balance</label><input id="aOpen" class="num" inputmode="decimal" placeholder="0" dir="ltr">
+        <span class="hint" data-i18n="openingHint">What the account held before you started recording here.</span></div>
+      <div class="f full">
+        <div class="err" id="acctErr" hidden></div>
+        <div class="actions">
+          <button class="btn primary" type="submit" id="aSave">Create account</button>
+          <button class="btn" type="button" id="aLedger" hidden data-i18n="viewLedger">View ledger</button>
+          <button class="btn danger" type="button" id="aDelete" hidden data-i18n="delete">Delete</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</aside>
+
+<!-- PERSON SHEET -->
+<aside class="sheet" id="personSheet" hidden role="dialog" aria-modal="true" aria-labelledby="personH">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-h"><h2 id="personH">New person</h2><button class="xbtn" type="button" data-close data-i18n-aria="close" aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <form id="personForm" autocomplete="off" class="fields" novalidate>
+      <div class="f full"><label for="pName" data-i18n="personName">Name</label><input id="pName" data-i18n-ph="personNewPh" placeholder="Name, e.g. Ali"></div>
+      <div class="f full">
+        <div class="err" id="personErr" hidden></div>
+        <div class="actions">
+          <button class="btn primary" type="submit" id="pSave">Add person</button>
+          <button class="btn danger" type="button" id="pDelete" hidden data-i18n="delete">Delete</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</aside>
+
+
+<!-- MY ACCOUNT SHEET -->
+<aside class="sheet" id="meSheet" hidden role="dialog" aria-modal="true" aria-labelledby="meH">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-h"><h2 id="meH" data-i18n="myAccount">My account</h2><button class="xbtn" type="button" data-close data-i18n-aria="close" aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <div class="me-card"><span class="ico avatar me-av" id="meAvatar">?</span><div style="min-width:0"><div class="nm" id="meName"></div><div class="hint" id="meEmail"></div></div></div>
+    <div class="f full"><label for="meFull" data-i18n="fullName">Full name</label><input id="meFull" autocomplete="name"></div>
+    <div class="actions"><button class="btn" type="button" id="meSave" data-i18n="saveName">Save name</button>
+      <button class="btn" type="button" id="meChangePass" data-i18n="changePass">Change password</button></div>
+    <div class="f full" id="meNewPassWrap" hidden><label for="meNewPass" data-i18n="newPass">New password</label>
+      <div class="dq"><input id="meNewPass" type="password" autocomplete="new-password"><button class="btn primary" type="button" id="meNewPassBtn" data-i18n="setPass">Set password</button></div></div>
+    <div class="actions"><span class="lbl" style="flex:1" data-i18n="language">Language</span><button class="btn" type="button" id="meLang">العربية</button></div>
+    <a class="btn" id="meAdmin" href="admin.html" hidden data-i18n="backOffice">Open back office</a>
+    <button class="btn danger" type="button" id="meOut" data-i18n="signOut">Sign out</button>
+  </div>
+</aside>
+
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="js/app.js"></script>
+<script src="js/pwa.js"></script>
+</body>
+</html>

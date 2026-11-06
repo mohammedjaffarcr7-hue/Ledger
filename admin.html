@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Daftar Back Office</title>
+<meta name="theme-color" content="#F3F4F7">
+<meta name="robots" content="noindex">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- SIGN IN -->
+<div class="auth" id="auth" hidden>
+  <div class="auth-card">
+    <img class="auth-logo" src="icons/icon-192.png" alt="" width="72" height="72">
+    <h1 class="auth-brand">Daftar <span class="ar">دفتر</span></h1>
+    <h2>Back office</h2>
+    <p class="hint">Sign in with an admin account.</p>
+    <form id="authForm" class="fields" novalidate>
+      <div class="f full"><label for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="email" dir="ltr"></div>
+      <div class="f full"><label for="aPass">Password</label><input id="aPass" type="password" autocomplete="current-password" dir="ltr"></div>
+      <div class="err" id="authErr" hidden></div>
+      <button class="btn primary auth-go" type="submit" id="authGo">Sign in</button>
+      <a class="btn ghost" href="index.html">← Back to the app</a>
+    </form>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand"><h1>Daftar</h1><span class="ar">Back office</span></div>
+    <nav class="tabs" aria-label="Sections">
+      <button class="tab" type="button" data-view="dash" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></button>
+      <button class="tab" type="button" data-view="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.3-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/></svg><span>Users</span></button>
+      <button class="tab" type="button" data-view="tx">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M4 9h16M4 14h16M10 4v16"/></svg><span>Transactions</span></button>
+    </nav>
+    <a class="btn small" href="index.html">Open app</a>
+    <button class="me-btn" type="button" id="outBtn" title="Sign out" aria-label="Sign out">?</button>
+  </div>
+</header>
+
+<main>
+  <!-- DASHBOARD -->
+  <section class="page" id="v-dash">
+    <div class="page-h"><div><h2>Dashboard</h2><div class="sub" id="dashSub">Everyone using Daftar, at a glance.</div></div>
+      <button class="btn" type="button" data-refresh>Refresh</button></div>
+    <div class="rtiles" id="kpis"></div>
+    <div class="ov-grid">
+      <div class="card"><div class="card-h"><h3>This month by currency</h3><span class="hint" id="dashMonth"></span></div><div class="card-b" id="dashCur"></div></div>
+      <div class="card"><div class="card-h"><h3>Newest users</h3><button class="btn ghost small" type="button" data-go="users">All users →</button></div><div class="card-b" id="dashUsers"></div></div>
+    </div>
+    <div class="card"><div class="card-h"><h3>Latest transactions</h3><button class="btn ghost small" type="button" data-go="tx">All transactions →</button></div>
+      <div class="tbl-wrap" id="dashTx"></div></div>
+  </section>
+
+  <!-- USERS -->
+  <section class="page" id="v-users" hidden>
+    <div class="page-h"><div><h2>Users</h2><div class="sub">Every login, with what they've recorded.</div></div>
+      <button class="btn primary" type="button" id="addUserBtn">+ Add user</button></div>
+    <div class="card">
+      <div class="filters">
+        <div class="fl grow"><label for="uQ">Search</label><input type="search" id="uQ" placeholder="Name or email"></div>
+        <div class="fl"><label for="uRole">Role</label><select id="uRole"><option value="">All</option><option value="user">Users</option><option value="admin">Admins</option></select></div>
+        <div class="fl"><label for="uStatus">Status</label><select id="uStatus"><option value="">All</option><option value="active">Active</option><option value="disabled">Disabled</option></select></div>
+      </div>
+      <div class="tbl-wrap" id="usersOut"></div>
+    </div>
+  </section>
+
+  <!-- TRANSACTIONS -->
+  <section class="page" id="v-tx" hidden>
+    <div class="page-h"><div><h2>Transactions</h2><div class="sub">All entries from all users. Tap a row to edit or delete it.</div></div>
+      <button class="btn" type="button" id="txExport">Export CSV</button></div>
+    <div class="card">
+      <div class="filters">
+        <div class="fl acct"><label for="tUser">User</label><select id="tUser"><option value="">All users</option></select></div>
+        <div class="fl"><label for="tType">Type</label>
+          <select id="tType"><option value="">All</option><option value="income">Income</option><option value="expense">Expense</option><option value="transfer">Transfer</option><option value="exchange">Exchange</option><option value="debt">Debt</option></select></div>
+        <div class="fl"><label for="tFrom">From</label><input type="date" id="tFrom"></div>
+        <div class="fl"><label for="tTo">To</label><input type="date" id="tTo"></div>
+        <div class="fl grow"><label for="tQ">Search</label><input type="search" id="tQ" placeholder="Note or category"></div>
+      </div>
+      <div class="tbl-wrap" id="txOut"></div>
+      <div class="pager"><span class="hint" id="txCount"></span><span class="actions"><button class="btn small" type="button" id="txPrev">← Newer</button><button class="btn small" type="button" id="txNext">Older →</button></span></div>
+    </div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<!-- USER SHEET -->
+<aside class="sheet wide" id="userSheet" hidden role="dialog" aria-modal="true" aria-labelledby="uH">
+  <div class="sheet-h"><h2 id="uH">User</h2><button class="xbtn" type="button" data-close aria-label="Close">×</button></div>
+  <div class="sheet-b" id="userBody"></div>
+</aside>
+
+<!-- ADD USER SHEET -->
+<aside class="sheet" id="addSheet" hidden role="dialog" aria-modal="true" aria-labelledby="addH">
+  <div class="sheet-h"><h2 id="addH">Add user</h2><button class="xbtn" type="button" data-close aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <p class="hint" style="margin:0">Creates a login for someone else. Give them the email and password; they can change the password from the app after signing in.</p>
+    <form id="addForm" class="fields" novalidate>
+      <div class="f full"><label for="nName">Full name</label><input id="nName"></div>
+      <div class="f full"><label for="nEmail">Email</label><input id="nEmail" type="email" dir="ltr" autocomplete="off"></div>
+      <div class="f full"><label for="nPass">Temporary password</label><input id="nPass" dir="ltr" autocomplete="off"><span class="hint">At least 6 characters.</span></div>
+      <div class="err" id="addErr" hidden></div>
+      <div class="actions"><button class="btn primary" type="submit" id="addGo">Create user</button></div>
+    </form>
+  </div>
+</aside>
+
+<!-- TRANSACTION SHEET -->
+<aside class="sheet" id="txSheet" hidden role="dialog" aria-modal="true" aria-labelledby="txH">
+  <div class="sheet-h"><h2 id="txH">Edit transaction</h2><button class="xbtn" type="button" data-close aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <div class="me-card" id="txWho"></div>
+    <form id="txForm" class="fields" novalidate>
+      <div class="f full"><label for="eAmount">Amount</label><input id="eAmount" inputmode="decimal" dir="ltr"></div>
+      <div class="f full" id="eToWrap"><label for="eToAmount">Amount received</label><input id="eToAmount" inputmode="decimal" dir="ltr"></div>
+      <div class="f full"><label for="eDate">Date</label><input id="eDate" type="date"></div>
+      <div class="f full" id="eCatWrap"><label for="eCat">Category</label><input id="eCat"></div>
+      <div class="f full"><label for="eNote">Note</label><input id="eNote"></div>
+      <div class="err" id="txErr" hidden></div>
+      <div class="actions"><button class="btn primary" type="submit">Save changes</button><button class="btn danger" type="button" id="txDel">Delete</button></div>
+      <p class="hint" id="txMeta" style="margin:0"></p>
+    </form>
+  </div>
+</aside>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
