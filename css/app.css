@@ -713,3 +713,157 @@ body{margin:0}
 .cat-in{flex:1;min-width:150px;background:var(--soft);border:1.5px solid transparent;border-radius:14px;min-height:48px;padding:10px 14px;font-size:16px}
 .cat-in:focus{outline:none;border-color:var(--accent);background:#fff}
 #catSheet .chips .chip{cursor:default}
+
+/* =====================================================================
+   v5 · "Ledger paper"
+   One accent (ledger green), warm paper canvas, white surfaces that stand out
+   by contrast (no drop shadows), money colours kept apart from the brand colour.
+   Built against: tasteskill motion layer, Vercel Web Interface Guidelines,
+   DESIGN.md method (awesome-design-md), image-to-code anti-slop rules.
+   ===================================================================== */
+:root{
+  color-scheme:light;
+  --bg:#F4F2ED; --surface:#FFFFFF; --soft:#F1EEE7; --soft2:#E8E4DA; --pressed:#DED9CC; --hover:#F7F5F0;
+  --ink:#16140F; --ink2:#2E2B24; --muted:#6F6A5F; --line:#E5E1D7; --line2:#EEEBE3;
+  --accent:#164E3B; --accent-hi:#1D6149; --accent-ink:#FFFFFF; --accent-soft:#E2ECE6;
+  --in:#13834A; --out:#C2412D; --warn:#B7791F;
+  --cream:#F6F0DF;
+  --r:24px; --r-md:16px; --r-sm:12px;
+}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-feature-settings:"ss01" 1,"cv11" 1}
+h1,h2,h3{letter-spacing:-.025em}
+
+/* surfaces: flat, contrast carries the depth */
+.card,#v-overview .card,.acc-card,.rtile,.banner,.auth-card{box-shadow:none!important;border:0;background:var(--surface)}
+.card{border-radius:var(--r)}
+.card-h h3{font-size:16px;font-weight:650}
+.btn{box-shadow:none;background:var(--surface);color:var(--ink)}
+.btn:hover{background:var(--soft2)}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:none}
+.btn.primary:hover{background:var(--accent-hi);box-shadow:none}
+.btn.ghost{color:var(--accent)} .btn.ghost:hover{background:var(--accent-soft)}
+.btn.danger{background:#F8E5E0;color:var(--out)} .btn.danger.confirm{background:var(--out);color:#fff}
+.btn:focus-visible,.tab:focus-visible,.pk:focus-visible,.ct:focus-visible,.chip:focus-visible,.me-btn:focus-visible,.qa-b:focus-visible .qa-i{outline:2px solid var(--accent);outline-offset:2px}
+.f input:focus-visible,.f select:focus-visible,.fl select:focus-visible,.fl input:focus-visible,.cat-in:focus-visible{outline:none;border-color:var(--accent)!important;background:#fff}
+.lang{background:var(--surface)}
+.me-btn{background:var(--accent)}
+
+/* top bar + tabs */
+.topbar{background:var(--bg)}
+.brand h1{font-weight:750;letter-spacing:-.035em}
+.brand .ar{color:var(--muted)}
+.tab:hover{background:var(--surface);color:var(--ink)}
+.tab[aria-current="page"]{background:var(--ink);color:#fff}
+@media (max-width:720px){
+  .tabs{background:rgba(244,242,237,.92);border-top:1px solid var(--line)}
+  .tab[aria-current="page"]{color:var(--ink);background:transparent}
+  .tab[aria-current="page"] svg{background:var(--accent);color:#fff}
+  .fab{background:var(--accent);box-shadow:0 8px 20px -8px rgba(22,78,59,.55)}
+}
+
+/* hero: flat ledger-green cover, cream numbers, no glow */
+.hero{background:var(--accent);color:var(--cream);box-shadow:none;border-radius:28px}
+.hero::before,.hero::after{display:none}
+.hero-lbl{color:rgba(246,240,223,.7)}
+.hero-num{color:var(--cream);font-weight:750;letter-spacing:-.045em}
+.hero-num small.cur{color:rgba(246,240,223,.55)}
+.hero-num.neg{color:#FFB4A6}
+.hero-sub{color:rgba(246,240,223,.72)}
+.hero-net.up{background:rgba(246,240,223,.12);color:#BFF0CF}
+.hero-net.down{background:rgba(255,180,166,.16);color:#FFC9BE}
+.curtabs{background:rgba(0,0,0,.18)}
+.curtabs button{color:rgba(246,240,223,.75)}
+.curtabs button[aria-pressed="true"]{background:var(--cream);color:var(--accent)}
+.qa-i{background:rgba(246,240,223,.12);backdrop-filter:none;color:var(--cream)}
+.qa-b:hover .qa-i{background:rgba(246,240,223,.22)}
+.qa-t{color:rgba(246,240,223,.88)}
+.hero-btn{background:var(--cream);color:var(--accent)}
+
+/* wallet cards: flat, harmonised colours (no gradients) */
+.wcard{box-shadow:none;border-radius:20px}
+.wcard::before{display:none}
+.wcard:hover{box-shadow:none;transform:translateY(-2px)}
+.wcard.k-bank{background:#1F4E3D;color:#fff}
+.wcard.k-prepaid{background:#22201B;color:#fff}
+.wcard.k-wallet{background:#2D5F73;color:#fff}
+.wcard.k-savings{background:#A86A1C;color:#fff}
+.wcard.k-other{background:#5E5A51;color:#fff}
+.wcard.k-cash{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.wc-chip{background:linear-gradient(135deg,#E9D9A6,#B99B57);opacity:.9}
+.wc-cur{background:rgba(255,255,255,.16)} .wcard.k-cash .wc-cur{background:var(--soft)}
+.wadd{border:1.5px dashed #CFC9BB;border-radius:20px}
+.wadd:hover{background:var(--surface);border-color:var(--accent)}
+.acc-card:hover{box-shadow:none}
+
+/* lists */
+.arow:hover,.rrow:hover{background:var(--soft)}
+.arow:hover .ico,.rrow:hover .ico,.rrow:hover .txi{background:var(--surface)}
+.ico{background:var(--soft)}
+.txi{background:var(--soft)}
+.txi-income{background:#DDF1E4;color:var(--in)}
+.rrow .amt{font-weight:650}
+
+/* category bars take their category's colour */
+.bar .track{background:var(--soft);height:8px}
+.bar .fill{background:var(--c,var(--accent))}
+.bar > span:first-child{display:flex;align-items:center;gap:8px;min-width:0}
+.bar .dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+
+/* this-month table: no mono, quieter header */
+.mstats td:first-child{font-family:var(--body);font-weight:650;color:var(--ink)}
+.mstats th{letter-spacing:.04em}
+
+/* pickers + category tiles */
+.pk{background:var(--soft)} .pk:hover{background:var(--soft2)}
+.pk.on{background:var(--accent);color:#fff;box-shadow:none}
+.pk .ico{background:var(--surface)}
+.ct{background:var(--soft);border-radius:18px} .ct:hover{background:var(--soft2)}
+.ct.on{box-shadow:none}
+.seg,.modes{background:var(--soft)}
+.seg button[aria-pressed="true"],.modes button[aria-pressed="true"]{background:var(--ink);box-shadow:none}
+.dirs button,.chip,.sugg button,.ranges button{background:var(--soft)}
+.dirs button[aria-pressed="true"],.chip[aria-pressed="true"],.ranges button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.f input,.f select,.fl select,.fl input,.cat-in{background-color:var(--soft)}
+.monthnav{background:var(--soft)} .monthnav button:hover{background:var(--surface)}
+.amount-in{color:var(--ink)}
+
+/* ledger table */
+table.gl th{background:var(--surface)}
+table.gl tr.edge td,.lsum{background:var(--soft)}
+.lsum > div{border-inline-start-color:var(--bg)}
+.vt{background:var(--soft)}
+
+/* sheets */
+.sheet{background:var(--surface);box-shadow:-20px 0 60px rgba(22,20,15,.12)}
+.scrim{background:rgba(22,20,15,.38)}
+.sheet-b{overscroll-behavior:contain}
+.toast{background:var(--ink);box-shadow:none}
+
+/* sign-in: paper, no glow */
+.auth{background:var(--bg)}
+.auth-logo{box-shadow:none;border-radius:18px}
+.auth-card{border-radius:28px}
+
+/* phone: the order that matters on a small screen */
+@media (max-width:900px){
+  .ov-grid,.ov-grid > .stack{display:contents}
+  #v-overview .page{display:flex}
+  #v-overview .card{order:10}
+  #v-overview #ovAcctCard{order:2} #v-overview #recentCard{order:3} #v-overview #catCard{order:4}
+  #v-overview #monthCard{order:5} #v-overview #debtCard{order:6}
+  #balGrid{order:1} #v-overview .page-h{order:0} #v-overview [data-banner]{order:-1}
+}
+@media (max-width:720px){
+  .hero{border-radius:26px;margin-inline:0}
+  .card-h{padding:18px 18px 0}
+}
+@media (prefers-reduced-motion:reduce){ .wcard:hover{transform:none} }
+.bar > span:first-child{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .dot{display:inline-block;margin-inline-end:8px;vertical-align:1px}
+.card .wcard.k-cash{background:var(--soft);box-shadow:none}
+@media (max-width:720px){
+  .acc-grid .wcard:not(.mini){aspect-ratio:auto;min-height:150px}
+  .acc-grid .wadd{aspect-ratio:auto;min-height:64px;grid-auto-flow:column;gap:8px;border-radius:18px}
+  .acc-grid .wadd span{font-size:20px!important}
+}

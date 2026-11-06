@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Daftar Back Office</title>
-<meta name="theme-color" content="#F3F4F7">
+<meta name="theme-color" content="#F4F2ED">
 <meta name="robots" content="noindex">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -24,7 +24,7 @@
     <h2>Back office</h2>
     <p class="hint">Sign in with an admin account.</p>
     <form id="authForm" class="fields" novalidate>
-      <div class="f full"><label for="aEmail">Email</label><input id="aEmail" type="email" autocomplete="email" dir="ltr"></div>
+      <div class="f full"><label for="aEmail">Email</label><input id="aEmail" name="email" spellcheck="false" type="email" autocomplete="email" dir="ltr"></div>
       <div class="f full"><label for="aPass">Password</label><input id="aPass" type="password" autocomplete="current-password" dir="ltr"></div>
       <div class="err" id="authErr" hidden></div>
       <button class="btn primary auth-go" type="submit" id="authGo">Sign in</button>
@@ -70,7 +70,7 @@
       <button class="btn primary" type="button" id="addUserBtn">+ Add user</button></div>
     <div class="card">
       <div class="filters">
-        <div class="fl grow"><label for="uQ">Search</label><input type="search" id="uQ" placeholder="Name or email"></div>
+        <div class="fl grow"><label for="uQ">Search</label><input type="search" id="uQ" placeholder="Name or email…"></div>
         <div class="fl"><label for="uRole">Role</label><select id="uRole"><option value="">All</option><option value="user">Users</option><option value="admin">Admins</option></select></div>
         <div class="fl"><label for="uStatus">Status</label><select id="uStatus"><option value="">All</option><option value="active">Active</option><option value="disabled">Disabled</option></select></div>
       </div>
@@ -89,7 +89,7 @@
           <select id="tType"><option value="">All</option><option value="income">Income</option><option value="expense">Expense</option><option value="transfer">Transfer</option><option value="exchange">Exchange</option><option value="debt">Debt</option></select></div>
         <div class="fl"><label for="tFrom">From</label><input type="date" id="tFrom"></div>
         <div class="fl"><label for="tTo">To</label><input type="date" id="tTo"></div>
-        <div class="fl grow"><label for="tQ">Search</label><input type="search" id="tQ" placeholder="Note or category"></div>
+        <div class="fl grow"><label for="tQ">Search</label><input type="search" id="tQ" placeholder="Note or category…"></div>
       </div>
       <div class="tbl-wrap" id="txOut"></div>
       <div class="pager"><span class="hint" id="txCount"></span><span class="actions"><button class="btn small" type="button" id="txPrev">← Newer</button><button class="btn small" type="button" id="txNext">Older →</button></span></div>
@@ -112,7 +112,7 @@
     <p class="hint" style="margin:0">Creates a login for someone else. Give them the email and password; they can change the password from the app after signing in.</p>
     <form id="addForm" class="fields" novalidate>
       <div class="f full"><label for="nName">Full name</label><input id="nName"></div>
-      <div class="f full"><label for="nEmail">Email</label><input id="nEmail" type="email" dir="ltr" autocomplete="off"></div>
+      <div class="f full"><label for="nEmail">Email</label><input id="nEmail" spellcheck="false" type="email" dir="ltr" autocomplete="off"></div>
       <div class="f full"><label for="nPass">Temporary password</label><input id="nPass" dir="ltr" autocomplete="off"><span class="hint">At least 6 characters.</span></div>
       <div class="err" id="addErr" hidden></div>
       <div class="actions"><button class="btn primary" type="submit" id="addGo">Create user</button></div>

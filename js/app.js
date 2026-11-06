@@ -454,7 +454,7 @@ function renderOverview(){
   $("breakdown").innerHTML = !ex.length ? `<div class="hint">${esc(t("noExpenses",{month:monthName(S.month)}))}</div>` :
     keys.map(c=>{
       const rows=Object.entries(by[c]).sort((a,b)=>b[1]-a[1]), max=rows[0][1], tot=rows.reduce((s,r)=>s+r[1],0);
-      return (keys.length>1?`<div class="bd-cur">${esc(c)}</div>`:"")+rows.map(([k,v])=>`<div class="bar" role="button" tabindex="0" data-cat="${esc(k)}"><span>${esc(catLabel(k))} <span class="hint" dir="ltr">${Math.round(v/tot*100)}%</span></span><span class="track"><span class="fill" style="width:${Math.max(2,v/max*100)}%"></span></span><span class="v">${fmt(v,c)}</span></div>`).join("");
+      return (keys.length>1?`<div class="bd-cur">${esc(c)}</div>`:"")+rows.map(([k,v])=>`<div class="bar" role="button" tabindex="0" data-cat="${esc(k)}" style="--c:${catColor(k)}"><span><i class="dot" aria-hidden="true"></i>${esc(catLabel(k))} <span class="hint" dir="ltr">${Math.round(v/tot*100)}%</span></span><span class="track"><span class="fill" style="width:${Math.max(2,v/max*100)}%"></span></span><span class="v">${fmt(v,c)}</span></div>`).join("");
     }).join("");
 
   if(!S.entReady){ $("recent").innerHTML=`<div class="empty">${t("loading")}</div>`; return; }

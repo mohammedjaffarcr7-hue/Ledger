@@ -1,18 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3D6BFF"/><stop offset="1" stop-color="#0B1220"/>
-    </linearGradient>
-    <radialGradient id="h" cx="0.85" cy="0.1" r="0.8">
-      <stop offset="0" stop-color="#5B86FF" stop-opacity=".9"/><stop offset="1" stop-color="#5B86FF" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
-  <rect width="512" height="512" fill="url(#g)"/>
-  <rect width="512" height="512" fill="url(#h)"/>
-  <g transform="translate(256 262)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+  <rect width="512" height="512" fill="#164E3B"/>
+  <g transform="translate(256 262)" fill="none" stroke="#F6F0DF" stroke-linecap="round" stroke-linejoin="round">
     <path d="M-118 -96 Q-60 -116 0 -86 Q60 -116 118 -96 V100 Q60 80 0 110 Q-60 80 -118 100 Z" stroke-width="22"/>
     <path d="M0 -86 V110" stroke-width="22"/>
-    <path d="M-84 -40 H-34 M-84 4 H-34 M-84 48 H-50" stroke-width="16" opacity=".85"/>
-    <path d="M34 -40 H84 M34 4 H84 M34 48 H68" stroke-width="16" opacity=".85"/>
+    <path d="M-84 -40 H-34 M-84 4 H-34 M-84 48 H-50" stroke-width="16" opacity=".8"/>
+    <path d="M34 -40 H84 M34 4 H84" stroke-width="16" opacity=".8"/>
+    <path d="M34 48 H68" stroke="#E9C46A" stroke-width="16"/>
   </g>
 </svg>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Daftar</title>
 <meta name="description" content="Daftar: your personal money ledger.">
-<meta name="theme-color" content="#F3F4F7">
+<meta name="theme-color" content="#F4F2ED">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -27,9 +27,9 @@
     <h2 id="authH">Welcome back</h2>
     <p class="hint" id="authSub">Sign in to your ledger.</p>
     <form id="authForm" class="fields" novalidate autocomplete="on">
-      <div class="f full" id="authNameWrap" hidden><label for="aFull" data-i18n="fullName">Full name</label><input id="aFull" autocomplete="name"></div>
-      <div class="f full"><label for="aEmail" data-i18n="email">Email</label><input id="aEmail" type="email" inputmode="email" autocomplete="email" dir="ltr"></div>
-      <div class="f full" id="authPassWrap"><label for="aPass" data-i18n="password">Password</label><input id="aPass" type="password" autocomplete="current-password" dir="ltr"></div>
+      <div class="f full" id="authNameWrap" hidden><label for="aFull" data-i18n="fullName">Full name</label><input id="aFull" name="name" autocomplete="name"></div>
+      <div class="f full"><label for="aEmail" data-i18n="email">Email</label><input id="aEmail" name="email" spellcheck="false" type="email" inputmode="email" autocomplete="email" dir="ltr"></div>
+      <div class="f full" id="authPassWrap"><label for="aPass" data-i18n="password">Password</label><input id="aPass" name="password" type="password" autocomplete="current-password" dir="ltr"></div>
       <div class="err" id="authErr" hidden></div>
       <button class="btn primary auth-go" type="submit" id="authGo">Sign in</button>
       <button class="btn ghost" type="button" id="authForgot" data-i18n="forgot">Forgot password?</button>
@@ -71,7 +71,7 @@
     <div id="balGrid"></div>
     <div class="ov-grid">
       <div class="stack">
-        <div class="card">
+        <div class="card" id="monthCard">
           <div class="card-h"><h3 data-i18n="thisMonth">This month</h3>
             <div class="monthnav" data-i18n-aria="month" aria-label="Month">
               <button type="button" data-m="-1" data-i18n-aria="prevMonth" aria-label="Previous month">‹</button>
@@ -81,21 +81,21 @@
           </div>
           <div class="card-b" id="mStats"></div>
         </div>
-        <div class="card">
+        <div class="card" id="recentCard">
           <div class="card-h"><h3 data-i18n="recent">Recent activity</h3><button class="btn ghost small" type="button" data-go="ledger" data-i18n="openLedger">Open ledger →</button></div>
           <div class="card-b"><div class="recent" id="recent"></div></div>
         </div>
       </div>
       <div class="stack">
-        <div class="card">
+        <div class="card" id="debtCard">
           <div class="card-h"><h3 data-i18n="debts">Debts</h3><button class="btn ghost small" type="button" data-go="people" data-i18n="viewAll">View all →</button></div>
           <div class="card-b" id="ovDebts"></div>
         </div>
-        <div class="card">
+        <div class="card" id="ovAcctCard">
           <div class="card-h"><h3 data-i18n="accounts">Accounts</h3><button class="btn ghost small" type="button" data-go="accounts" data-i18n="manage">Manage →</button></div>
           <div class="card-b"><div class="wstrip" id="ovAccts"></div></div>
         </div>
-        <div class="card">
+        <div class="card" id="catCard">
           <div class="card-h"><h3 data-i18n="byCategory">Spending by category</h3><span class="hint" data-monthlabel></span></div>
           <div class="card-b"><div class="bd" id="breakdown"></div></div>
         </div>
@@ -292,7 +292,7 @@
   <div class="sheet-b">
     <p class="hint" style="margin:0" data-i18n="catsSub">Add your own categories.</p>
     <div class="modes" id="catTypes" role="group"><button type="button" data-ct="expense" aria-pressed="true" data-i18n="t_expense">Expense</button><button type="button" data-ct="income" aria-pressed="false" data-i18n="t_income">Income</button></div>
-    <form id="catForm" class="dq" autocomplete="off" novalidate><input id="catNew" data-i18n-ph="newCatPh" placeholder="New category name" class="cat-in"><button class="btn primary" type="submit" data-i18n="addCat">Add</button></form>
+    <form id="catForm" class="dq" autocomplete="off" novalidate><input id="catNew" data-i18n-ph="newCatPh" placeholder="New category name…" class="cat-in"><button class="btn primary" type="submit" data-i18n="addCat">Add</button></form>
     <div class="err" id="catErr" hidden></div>
     <span class="lbl" data-i18n="ownCats">Yours</span>
     <div class="cat-list" id="catMine"></div>

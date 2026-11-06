@@ -27,3 +27,4 @@ table.gl td .em{display:block;color:var(--muted);font-size:12.5px}
   .topbar-in a.btn{display:none}
   .sheet.wide{width:100%}
 }
+.rtiles .rtile .n{font-family:var(--body);font-weight:700;letter-spacing:-.03em}
