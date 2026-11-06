@@ -147,7 +147,7 @@
     <div class="banner" data-banner hidden></div>
     <div class="page-h">
       <div><h2 data-i18n="debts">Debts</h2><div class="sub" data-i18n="debtsSub">Who owes you, and whom you owe.</div></div>
-      <button class="btn primary" type="button" data-adddebt data-i18n="newDebtBtn">+ New debt</button>
+      <div class="actions"><button class="btn" type="button" data-addperson data-i18n="addPersonBtn">+ Add person</button><button class="btn primary" type="button" data-adddebt data-i18n="newDebtBtn">+ New debt</button></div>
     </div>
     <div id="pplOut"></div>
   </section>
@@ -285,6 +285,22 @@
 </aside>
 
 
+<!-- CATEGORIES SHEET -->
+<aside class="sheet" id="catSheet" hidden role="dialog" aria-modal="true" aria-labelledby="catH">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sheet-h"><h2 id="catH" data-i18n="myCats">My categories</h2><button class="xbtn" type="button" data-close data-i18n-aria="close" aria-label="Close">×</button></div>
+  <div class="sheet-b">
+    <p class="hint" style="margin:0" data-i18n="catsSub">Add your own categories.</p>
+    <div class="modes" id="catTypes" role="group"><button type="button" data-ct="expense" aria-pressed="true" data-i18n="t_expense">Expense</button><button type="button" data-ct="income" aria-pressed="false" data-i18n="t_income">Income</button></div>
+    <form id="catForm" class="dq" autocomplete="off" novalidate><input id="catNew" data-i18n-ph="newCatPh" placeholder="New category name" class="cat-in"><button class="btn primary" type="submit" data-i18n="addCat">Add</button></form>
+    <div class="err" id="catErr" hidden></div>
+    <span class="lbl" data-i18n="ownCats">Yours</span>
+    <div class="cat-list" id="catMine"></div>
+    <span class="lbl" data-i18n="builtInCats">General categories</span>
+    <div class="chips" id="catBuiltIn"></div>
+  </div>
+</aside>
+
 <!-- MY ACCOUNT SHEET -->
 <aside class="sheet" id="meSheet" hidden role="dialog" aria-modal="true" aria-labelledby="meH">
   <div class="grab" aria-hidden="true"></div>
@@ -297,6 +313,7 @@
     <div class="f full" id="meNewPassWrap" hidden><label for="meNewPass" data-i18n="newPass">New password</label>
       <div class="dq"><input id="meNewPass" type="password" autocomplete="new-password"><button class="btn primary" type="button" id="meNewPassBtn" data-i18n="setPass">Set password</button></div></div>
     <div class="actions"><span class="lbl" style="flex:1" data-i18n="language">Language</span><button class="btn" type="button" id="meLang">العربية</button></div>
+    <button class="btn" type="button" id="meCats" data-i18n="manageCats">Manage categories</button>
     <a class="btn" id="meAdmin" href="admin.html" hidden data-i18n="backOffice">Open back office</a>
     <button class="btn danger" type="button" id="meOut" data-i18n="signOut">Sign out</button>
   </div>

@@ -36,6 +36,16 @@ create table if not exists public.people (
   updated_at    timestamptz not null default now()
 );
 
+-- Categories each user adds on top of the general ones built into the app.
+create table if not exists public.categories (
+  id            text primary key,
+  user_id       uuid not null default auth.uid() references public.profiles(id) on delete cascade,
+  type          text not null check (type in ('income','expense')),
+  name          text not null,
+  created_ms    bigint not null default (extract(epoch from now())*1000)::bigint,
+  updated_at    timestamptz not null default now()
+);
+
 create table if not exists public.entries (
   id            text primary key,
   user_id       uuid not null default auth.uid() references public.profiles(id) on delete cascade,
@@ -59,6 +69,7 @@ create index if not exists entries_user_date on public.entries(user_id, date des
 create index if not exists entries_date on public.entries(date desc);
 create index if not exists accounts_user on public.accounts(user_id);
 create index if not exists people_user on public.people(user_id);
+create index if not exists categories_user on public.categories(user_id);
 
 -- ---------------------------------------------------------------
 -- Helpers
@@ -124,6 +135,7 @@ alter table public.profiles enable row level security;
 alter table public.accounts enable row level security;
 alter table public.people   enable row level security;
 alter table public.entries  enable row level security;
+alter table public.categories enable row level security;
 
 drop policy if exists "profile read"   on public.profiles;
 drop policy if exists "profile update" on public.profiles;
@@ -135,7 +147,7 @@ create policy "profile delete" on public.profiles for delete using (public.is_ad
 do $$
 declare t text;
 begin
-  foreach t in array array['accounts','people','entries'] loop
+  foreach t in array array['accounts','people','entries','categories'] loop
     execute format('drop policy if exists "own rows" on public.%I', t);
     execute format('drop policy if exists "admin rows" on public.%I', t);
     execute format($p$create policy "own rows" on public.%I for all

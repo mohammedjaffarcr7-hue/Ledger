@@ -5,6 +5,10 @@ const $$ = s => [...document.querySelectorAll(s)];
 /* ---------- language ---------- */
 const I18N = {
   en:{
+    myCats:"My categories", manageCats:"Manage categories", catsSub:"Add your own categories. They appear when you record an entry, alongside the general ones.",
+    newCatPh:"New category name", addCat:"Add", ownCats:"Yours", builtInCats:"General categories", noOwnCats:"You haven't added any yet.",
+    errCatName:"Type a name for the category.", errCatExists:"That category already exists.", catAdded:"Category added", catDeleted:"Category deleted",
+    addPersonBtn:"+ Add person", peopleSub:"Add anyone you lend to or borrow from. Only you can see your list.",
     signInH:"Welcome back", signInSub:"Sign in to your ledger.", signUpH:"Create your account", signUpSub:"Your own private ledger, on any phone.",
     resetH:"Reset password", resetSub:"We'll email you a link to choose a new password.",
     signInBtn:"Sign in", signUpBtn:"Create account", resetBtn:"Send reset link", noAccount:"New here? Create an account", haveAccount:"Already have an account? Sign in",
@@ -15,11 +19,11 @@ const I18N = {
     resetSent:"If that email has an account, a reset link is on its way.", noConfig:"The app isn't connected to its server yet. Add your Supabase keys in config.js.",
     myAccount:"My account", signOut:"Sign out", backOffice:"Open back office", language:"Language", saveName:"Save name",
     changePass:"Change password", newPass:"New password", setPass:"Set password", passChanged:"Password changed",
-    dqToday:"Today", dqYest:"Yesterday", customCat:"Custom", customCatPh:"Type a category…",
+    dqToday:"Today", dqYest:"Yesterday", customCat:"New", customCatPh:"Type a category…",
     totalBalance:"Total balance", monthNet:"{v} this month", gm:"Good morning", ga:"Good afternoon", ge:"Good evening",
     debts:"Debts", debtsSub:"Who owes you, and whom you owe.", newDebtBtn:"+ New debt", people:"People", viewAll:"View all →",
     owedToYou:"Owed to you", youOweTotal:"You owe", owesYou:"Owes you", youOwe:"You owe", settled:"All settled",
-    noPeople:"No one yet. Tap “+ New debt” to record money you lent or borrowed.", noDebts:"No debts recorded.",
+    noPeople:"No one yet. Tap “+ Add person” to add someone, or “+ New debt” to record money you lent or borrowed.", noDebts:"No debts recorded.",
     t_debt:"Debt", d_lent:"I lent", d_borrowed:"I borrowed", d_collected:"They paid me back", d_repaid:"I paid back",
     person:"Person", personNewPh:"Name, e.g. Ali…", newPersonOpt:"+ New person…", noCash:"None, just record the debt",
     paidFrom:"Paid from (optional)", receivedInto:"Received into (optional)", add_debt:"Save debt", save_debt:"Save debt",
@@ -69,6 +73,10 @@ const I18N = {
     demo:"Preview with example figures. Nothing you enter here is saved.", unavailable:"This ledger isn't available to you right now.", lost:"Lost the connection to your ledger. Reload the page to reconnect."
   },
   ar:{
+    myCats:"فئاتي", manageCats:"إدارة الفئات", catsSub:"أضف فئاتك الخاصة. تظهر عند تسجيل أي قيد، إلى جانب الفئات العامة.",
+    newCatPh:"اسم الفئة الجديدة", addCat:"إضافة", ownCats:"فئاتك", builtInCats:"الفئات العامة", noOwnCats:"لم تضف أي فئة بعد.",
+    errCatName:"اكتب اسماً للفئة.", errCatExists:"هذه الفئة موجودة مسبقاً.", catAdded:"تمت إضافة الفئة", catDeleted:"تم حذف الفئة",
+    addPersonBtn:"+ إضافة شخص", peopleSub:"أضف أي شخص تقرضه أو تقترض منه. قائمتك لا يراها غيرك.",
     signInH:"أهلاً بعودتك", signInSub:"سجّل الدخول إلى دفترك.", signUpH:"أنشئ حسابك", signUpSub:"دفترك الخاص، على أي هاتف.",
     resetH:"إعادة تعيين كلمة المرور", resetSub:"سنرسل لك رابطاً لاختيار كلمة مرور جديدة.",
     signInBtn:"تسجيل الدخول", signUpBtn:"إنشاء الحساب", resetBtn:"إرسال الرابط", noAccount:"جديد هنا؟ أنشئ حساباً", haveAccount:"لديك حساب؟ سجّل الدخول",
@@ -79,11 +87,11 @@ const I18N = {
     resetSent:"إذا كان لهذا البريد حساب، فسيصلك رابط إعادة التعيين.", noConfig:"التطبيق غير متصل بالخادم بعد. أضف مفاتيح Supabase في config.js.",
     myAccount:"حسابي", signOut:"تسجيل الخروج", backOffice:"فتح لوحة الإدارة", language:"اللغة", saveName:"حفظ الاسم",
     changePass:"تغيير كلمة المرور", newPass:"كلمة المرور الجديدة", setPass:"تعيين", passChanged:"تم تغيير كلمة المرور",
-    dqToday:"اليوم", dqYest:"أمس", customCat:"فئة أخرى", customCatPh:"اكتب اسم الفئة…",
+    dqToday:"اليوم", dqYest:"أمس", customCat:"جديدة", customCatPh:"اكتب اسم الفئة…",
     totalBalance:"الرصيد الكلي", monthNet:"{v} هذا الشهر", gm:"صباح الخير", ga:"مساء الخير", ge:"مساء الخير",
     debts:"الديون", debtsSub:"من يدين لك، ولمن أنت مدين.", newDebtBtn:"+ دين جديد", people:"الأشخاص", viewAll:"عرض الكل ←",
     owedToYou:"لك عند الآخرين", youOweTotal:"عليك للآخرين", owesYou:"يدين لك بـ", youOwe:"أنت مدين له بـ", settled:"لا ديون",
-    noPeople:"لا يوجد أحد بعد. اضغط «+ دين جديد» لتسجيل مال أقرضته أو اقترضته.", noDebts:"لا توجد ديون مسجّلة.",
+    noPeople:"لا يوجد أحد بعد. اضغط «+ إضافة شخص» لإضافة أحد، أو «+ دين جديد» لتسجيل مال أقرضته أو اقترضته.", noDebts:"لا توجد ديون مسجّلة.",
     t_debt:"دين", d_lent:"أقرضت", d_borrowed:"اقترضت", d_collected:"سدّد لي", d_repaid:"سدّدت له",
     person:"الشخص", personNewPh:"الاسم، مثلاً علي…", newPersonOpt:"+ شخص جديد…", noCash:"لا شيء، سجّل الدين فقط",
     paidFrom:"دُفع من (اختياري)", receivedInto:"استُلم في (اختياري)", add_debt:"حفظ الدين", save_debt:"حفظ الدين",
@@ -133,7 +141,7 @@ const I18N = {
     demo:"معاينة بأرقام تجريبية. لن يُحفظ أي شيء تدخله هنا.", unavailable:"هذا الدفتر غير متاح لك حالياً.", lost:"انقطع الاتصال بدفترك. أعد تحميل الصفحة."
   }
 };
-const CAT_AR = {"Food":"طعام","Groceries":"بقالة","Transport":"مواصلات","Rent":"إيجار","Bills":"فواتير","Phone & Internet":"هاتف وإنترنت","University":"الجامعة","Books & Supplies":"كتب ومستلزمات","Health":"صحة","Gym":"نادي رياضي","Clothes":"ملابس","Shopping":"تسوق","Entertainment":"ترفيه","Family":"عائلة","Gifts":"هدايا","Subscriptions":"اشتراكات","Other":"أخرى","Salary":"راتب","Allowance":"مصروف شهري","Freelance":"عمل حر","Gift":"هدية","Refund":"استرداد","Scholarship":"منحة","Opening balance":"رصيد افتتاحي","Transfer":"تحويل","Exchange":"صرف عملة","Debt":"دين"};
+const CAT_AR = {"Food":"طعام ومطاعم","Groceries":"بقالة","Transport":"مواصلات","Fuel":"وقود","Car":"السيارة","Rent":"إيجار","Bills":"فواتير وخدمات","Phone & Internet":"هاتف وإنترنت","Home":"المنزل والصيانة","Health":"صحة","Personal care":"عناية شخصية","Clothes":"ملابس","Shopping":"تسوق","Education":"تعليم","Entertainment":"ترفيه","Travel":"سفر","Subscriptions":"اشتراكات","Family":"عائلة وأطفال","Pets":"حيوانات أليفة","Insurance":"تأمين","Gifts & Donations":"هدايا وتبرعات","Fees & Taxes":"رسوم وضرائب","Other":"أخرى","Salary":"راتب","Business":"عمل تجاري","Freelance":"عمل حر","Bonus":"مكافأة","Allowance":"مصروف","Investment":"استثمار","Rental income":"دخل إيجار","Gift":"هدية","Refund":"استرداد","Opening balance":"رصيد افتتاحي","Transfer":"تحويل","Exchange":"صرف عملة","Debt":"دين","University":"الجامعة","Books & Supplies":"كتب ومستلزمات","Gym":"نادي رياضي","Gifts":"هدايا","Scholarship":"منحة"};
 const KIND_AR = {"Cash":"نقد","Bank card":"بطاقة مصرفية","Prepaid card":"بطاقة مسبقة الدفع","Digital wallet":"محفظة رقمية","Savings":"ادخار","Other":"أخرى"};
 let LANG = "en";
 try{ const s=localStorage.getItem("daftar.lang"); if(s==="ar"||s==="en") LANG=s; }catch(e){}
@@ -151,8 +159,8 @@ function locale(){ return LANG==="ar" ? "ar-IQ-u-nu-latn" : "en-GB"; }
 function bdi(s){ return `<bdi>${esc(s)}</bdi>`; }
 
 const CATS = {
-  expense:["Food","Groceries","Transport","Rent","Bills","Phone & Internet","University","Books & Supplies","Health","Gym","Clothes","Shopping","Entertainment","Family","Gifts","Subscriptions","Other"],
-  income:["Salary","Allowance","Freelance","Gift","Refund","Scholarship","Opening balance","Other"]
+  expense:["Food","Groceries","Transport","Fuel","Car","Rent","Bills","Phone & Internet","Home","Health","Personal care","Clothes","Shopping","Education","Entertainment","Travel","Subscriptions","Family","Pets","Insurance","Gifts & Donations","Fees & Taxes","Other"],
+  income:["Salary","Business","Freelance","Bonus","Allowance","Investment","Rental income","Gift","Refund","Opening balance","Other"]
 };
 const DEC = {IQD:0, USD:2, GBP:2, EUR:2, TRY:2, AED:2};
 const CUR_ORDER = ["IQD","USD","GBP","EUR","TRY","AED"];
@@ -177,7 +185,7 @@ const ICONS = {
   "k-other":'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>'
 };
 const TYPE_EN = {income:"Income", expense:"Expense", transfer:"Transfer", exchange:"Exchange", debt:"Debt"};
-const SHEETS = ["entrySheet","acctSheet","personSheet","meSheet"];
+const SHEETS = ["entrySheet","acctSheet","personSheet","meSheet","catSheet"];
 // Effect of a debt record on what a person owes you (+) or you owe them (−).
 function debtDelta(e){ const a=+e.amount||0; return {lent:a, repaid:a, borrowed:-a, collected:-a}[e.dir]||0; }
 // Cash effect on the account: lending and repaying take money out; borrowing and being repaid bring it in.
@@ -187,7 +195,7 @@ let authMode="in";
 const S = {
   accounts:[], entries:[], view:"overview", month:ym(new Date()), type:"expense", editId:null, editAcct:null,
   accReady:false, entReady:false, demo:false, lastAcct:"", banner:"",
-  people:[], pplReady:false, person:null, dir:"lent", editPerson:null,
+  people:[], cats:[], pplReady:false, person:null, dir:"lent", editPerson:null,
   hcur:null,
   led:{acct:"", from:"", to:"", range:"month", type:"", q:""}
 };
@@ -251,6 +259,7 @@ const sb = (window.supabase && CFG.supabaseUrl && CFG.supabaseAnonKey && !/YOUR-
 let ME = null;      // {id, email, full_name, role}
 const ACC_MAP = {id:"id", name:"name", kind:"kind", currency:"currency", opening:"opening", createdAt:"created_ms"};
 const PPL_MAP = {id:"id", name:"name", createdAt:"created_ms"};
+const CAT_MAP = {id:"id", type:"type", name:"name", createdAt:"created_ms"};
 const ENT_MAP = {id:"id", type:"type", amount:"amount", account:"account", toAccount:"to_account", toAmount:"to_amount", category:"category",
   note:"note", date:"date", person:"person", dir:"dir", currency:"currency", createdAt:"created_ms"};
 const NUMERIC = new Set(["amount","toAmount","opening","createdAt"]);
@@ -266,7 +275,8 @@ async function fetchAll(table){
   return out;
 }
 async function loadAll(){
-  const [a,p,e]=await Promise.all([fetchAll("accounts"),fetchAll("people"),fetchAll("entries")]);
+  const [a,p,e,c]=await Promise.all([fetchAll("accounts"),fetchAll("people"),fetchAll("entries"),fetchAll("categories").catch(()=>[])]);
+  S.cats=c.map(r=>fromRow(CAT_MAP,r));
   S.accounts=a.map(r=>fromRow(ACC_MAP,r)); S.people=p.map(r=>fromRow(PPL_MAP,r)); S.entries=e.map(r=>fromRow(ENT_MAP,r));
   sortEntries(); S.accReady=S.entReady=S.pplReady=true; renderAll();
 }
@@ -282,6 +292,8 @@ const store = {
   async setEntry(id,data){ local("entries",id,data); sortEntries(); renderAll(); await remote(()=>must(sb.from("entries").upsert(toRow(ENT_MAP,id,data)))); },
   async delEntry(id){ S.entries=S.entries.filter(e=>e.id!==id); renderAll(); await remote(()=>must(sb.from("entries").delete().eq("id",id))); },
   async setPerson(id,data){ local("people",id,data); renderAll(); await remote(()=>must(sb.from("people").upsert(toRow(PPL_MAP,id,data)))); },
+  async setCat(id,data){ local("cats",id,data); renderAll(); renderCatGrid(); await remote(()=>must(sb.from("categories").upsert(toRow(CAT_MAP,id,data)))); },
+  async delCat(id){ S.cats=S.cats.filter(c=>c.id!==id); renderAll(); renderCatGrid(); await remote(()=>must(sb.from("categories").delete().eq("id",id))); },
   async delPerson(id){ S.people=S.people.filter(p=>p.id!==id); renderAll(); await remote(()=>must(sb.from("people").delete().eq("id",id))); }
 };
 function downloadFile(name, data, type){
@@ -774,7 +786,11 @@ $("entryForm").addEventListener("submit", async ev=>{
       if(!(ta>0)) return formErr(t("errTrAmt",{cur:acctById(to).currency,name:acctById(to).name}));
       data.toAmount=ta;
     }
-  } else data.category=catKey($("fCat").value)||"Other";
+  } else {
+    data.category=catKey($("fCat").value)||"Other";
+    const known=CATS[S.type]?.includes(data.category) || S.cats.some(c=>c.type===S.type && c.name.toLowerCase()===data.category.toLowerCase());
+    if(!known && (S.type==="income"||S.type==="expense")) store.setCat(uid(),{type:S.type,name:data.category,createdAt:Date.now()}).catch(()=>{});
+  }
   const id=S.editId||uid(), wasEdit=!!S.editId;
   if(account) S.lastAcct=account;
   if(!date.startsWith(S.month)) S.month=date.slice(0,7);
@@ -888,6 +904,7 @@ document.addEventListener("click",ev=>{
   const pr=el.closest("[data-person]"); if(pr){ S.person=pr.dataset.person; renderPeople(); return window.scrollTo({top:0}); }
   if(el.closest("[data-backppl]")){ S.person=null; return renderPeople(); }
   const ep=el.closest("[data-editperson]"); if(ep) return openPerson(ep.dataset.editperson);
+  if(el.closest("[data-addperson]")) return openPerson(null);
   if(el.closest("[data-adddebt]")) return openNewEntry(null,{type:"debt", person:S.view==="people"?S.person:null});
   const df=el.closest("[data-debtfor]"); if(df) return openNewEntry(null,{type:"debt", person:df.dataset.debtfor});
   const st=el.closest("[data-settle]"); if(st) return openNewEntry(null,{type:"debt", dir:st.dataset.settle, person:S.person, cur:st.dataset.cur, amount:+st.dataset.amt});
@@ -951,13 +968,31 @@ const CAT_ICON={
   "Refund":CI('<path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/>'),
   "Scholarship":CI('<path d="m12 3 2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4l-5.2 2.7 1-5.8L3.5 9.2l5.9-.8z"/>'),
   "Opening balance":CI('<path d="M4 20h16M6 20V10M10 20V10M14 20V10M18 20V10M3 10l9-6 9 6"/>'),
-  "Other":CI('<circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/>')
+  "Other":CI('<circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/>'),
+  "Fuel":CI('<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M7 8h4M14 10h2a2 2 0 0 1 2 2v4a1.5 1.5 0 0 0 3 0V8l-3-3"/>'),
+  "Car":CI('<path d="M5 17h14v-4l-2-5H7l-2 5zM5 13h14"/><circle cx="8" cy="17" r="1.8"/><circle cx="16" cy="17" r="1.8"/>'),
+  "Home":CI('<path d="M3 11 12 4l9 7M5 10v10h14V10"/><path d="m10 15 4-4M14 15l-1.5-1.5"/>'),
+  "Personal care":CI('<path d="M9 3h6v4H9zM8 7h8l1 14H7z"/><path d="M10 12h4"/>'),
+  "Education":CI('<path d="M2 9 12 4l10 5-10 5zM6 11v5c3 2 9 2 12 0v-5"/>'),
+  "Travel":CI('<path d="M10.5 13.5 3 11l1.5-1.5 7.5 1 4-4.5c1-1 2.5-1.5 3.5-.5s.5 2.5-.5 3.5l-4.5 4 1 7.5L14 22l-2.5-7.5"/>'),
+  "Pets":CI('<circle cx="5" cy="10" r="1.8"/><circle cx="9" cy="5.5" r="1.8"/><circle cx="15" cy="5.5" r="1.8"/><circle cx="19" cy="10" r="1.8"/><path d="M12 11c-3 0-6 4.5-6 7a2.5 2.5 0 0 0 3.5 2.3c1.6-.6 3.4-.6 5 0A2.5 2.5 0 0 0 18 18c0-2.5-3-7-6-7z"/>'),
+  "Insurance":CI('<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>'),
+  "Gifts & Donations":CI('<rect x="3" y="9" width="18" height="12" rx="1"/><path d="M12 9v12M3 13h18M12 9C9 9 7 4 9.5 4S12 9 12 9zM12 9c3 0 5-5 2.5-5S12 9 12 9z"/>'),
+  "Fees & Taxes":CI('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM15 8l-6 6M9.5 8.5h.01M14.5 13.5h.01"/>'),
+  "Business":CI('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18M12 11v2"/>'),
+  "Bonus":CI('<path d="m12 3 2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4l-5.2 2.7 1-5.8L3.5 9.2l5.9-.8z"/>'),
+  "Investment":CI('<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>'),
+  "Rental income":CI('<path d="M3 11 12 4l9 7M5 10v10h14V10"/><circle cx="12" cy="14" r="2"/><path d="M12 16v4"/>')
 };
 const CAT_COLOR={"Food":"#EA580C","Groceries":"#16A34A","Transport":"#0284C7","Rent":"#2563EB","Bills":"#CA8A04","Phone & Internet":"#0891B2",
   "University":"#1D4ED8","Books & Supplies":"#B45309","Health":"#E11D48","Gym":"#DC2626","Clothes":"#DB2777","Shopping":"#F97316","Entertainment":"#0D9488",
   "Family":"#D97706","Gifts":"#BE123C","Gift":"#BE123C","Subscriptions":"#0F766E","Salary":"#059669","Allowance":"#16A34A","Freelance":"#0284C7",
-  "Refund":"#2563EB","Scholarship":"#CA8A04","Opening balance":"#475467","Other":"#667085"};
-function catColor(k){ return CAT_COLOR[k]||"#475467"; }
+  "Refund":"#2563EB","Scholarship":"#CA8A04","Opening balance":"#475467","Other":"#667085",
+  "Fuel":"#B45309","Car":"#475569","Home":"#7C3AED","Personal care":"#C026D3","Education":"#1D4ED8","Travel":"#0EA5E9","Pets":"#A16207",
+  "Insurance":"#0F766E","Gifts & Donations":"#BE123C","Fees & Taxes":"#64748B","Business":"#4F46E5","Bonus":"#CA8A04","Investment":"#059669","Rental income":"#7C3AED"};
+// a steady colour for categories people add themselves
+function ownColor(k){ const pal=["#EA580C","#16A34A","#0284C7","#7C3AED","#DB2777","#0D9488","#CA8A04","#4F46E5","#DC2626","#0891B2"]; let h=0; for(const ch of String(k)) h=(h*31+ch.codePointAt(0))|0; return pal[Math.abs(h)%pal.length]; }
+function catColor(k){ return CAT_COLOR[k]||ownColor(k); }
 const CAT_FALLBACK=CI('<path d="M4 7l8-4 8 4-8 4zM4 12l8 4 8-4M4 17l8 4 8-4"/>');
 let customCat=false;
 function renderCatGrid(){
@@ -966,7 +1001,8 @@ function renderCatGrid(){
   const base=CATS[ty].filter(c=>c!=="Other");
   // the user's own categories, most used first, then the built-in ones
   const counts={}; S.entries.forEach(e=>{ if(e.type===ty && e.category) counts[e.category]=(counts[e.category]||0)+1; });
-  const own=Object.keys(counts).filter(c=>!CATS[ty].includes(c)).sort((a,b)=>counts[b]-counts[a]);
+  const saved=S.cats.filter(c=>c.type===ty).map(c=>c.name);
+  const own=[...new Set([...saved,...Object.keys(counts)])].filter(c=>!CATS[ty].includes(c)&&!["Transfer","Exchange","Debt"].includes(c));
   const list=[...base,...own].sort((a,b)=>(counts[b]||0)-(counts[a]||0)).concat("Other");  // most used first, yours included
   const cur=catKey($("fCat").value||"");
   const isCustom=customCat || (cur && !list.includes(cur));
@@ -1131,8 +1167,8 @@ function loadSample(){
     {id:"e2",type:"transfer",amount:100000,account:"s-qi",toAccount:"s-cash",category:"Transfer",note:"ATM withdrawal",date:m+"-02",createdAt:now-8},
     {id:"e3",type:"expense",amount:6000,account:"s-cash",category:"Food",note:"Lunch at the cafeteria",date:m+"-03",createdAt:now-7},
     {id:"e4",type:"exchange",amount:100,account:"s-gbp",toAccount:"s-cash",toAmount:190000,category:"Exchange",note:"Exchange shop",date:m+"-04",createdAt:now-6},
-    {id:"e5",type:"expense",amount:15000,account:"s-cash",category:"Books & Supplies",note:"Lab notebook",date:m+"-05",createdAt:now-5},
-    {id:"e6",type:"expense",amount:35000,account:"s-qi",category:"Gym",note:"Monthly membership",date:m+"-06",createdAt:now-4},
+    {id:"e5",type:"expense",amount:15000,account:"s-cash",category:"Education",note:"Course books",date:m+"-05",createdAt:now-5},
+    {id:"e6",type:"expense",amount:35000,account:"s-qi",category:"Health",note:"Pharmacy",date:m+"-06",createdAt:now-4},
     {id:"e7",type:"transfer",amount:10,account:"s-usd",toAccount:"s-apple",category:"Transfer",note:"Gift card top-up",date:m+"-07",createdAt:now-3},
     {id:"e8",type:"expense",amount:2.99,account:"s-apple",category:"Subscriptions",note:"iCloud storage",date:m+"-08",createdAt:now-2},
     {id:"e9",type:"debt",dir:"lent",person:"p-ali",amount:25000,account:"s-cash",currency:"IQD",category:"Debt",note:"For his phone top-up",date:m+"-09",createdAt:now-1},
@@ -1206,9 +1242,36 @@ $("meSave").addEventListener("click",async ()=>{
 $("meOut").addEventListener("click",async ()=>{ closeSheets(); if(sb) await sb.auth.signOut(); else location.reload(); });
 function paintMe(){ const c=[...(ME?.full_name||ME?.email||"?").trim()][0]?.toUpperCase()||"?"; $("meBtn").textContent=c; $("meBtn").setAttribute("aria-label",ME?.full_name||ME?.email||""); }
 
+/* ---------- my categories ---------- */
+let catType="expense";
+function renderCatManager(){
+  $$("#catTypes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.ct===catType?"true":"false"));
+  const mine=S.cats.filter(c=>c.type===catType).sort((a,b)=>a.name.localeCompare(b.name));
+  $("catMine").innerHTML = mine.length ? mine.map(c=>`<div class="cat-row"><span class="txi txi-cat" style="--c:${catColor(c.name)}" aria-hidden="true">${CAT_ICON[c.name]||CAT_FALLBACK}</span><span class="nm">${bdi(c.name)}</span><button class="btn small danger" type="button" data-delcat="${esc(c.id)}">${esc(t("delete"))}</button></div>`).join("")
+    : `<div class="hint">${esc(t("noOwnCats"))}</div>`;
+  $("catBuiltIn").innerHTML = CATS[catType].map(k=>`<span class="chip">${esc(catLabel(k))}</span>`).join("");
+}
+function openCats(){ catType=S.type==="income"?"income":"expense"; $("catNew").value=""; $("catErr").hidden=true; renderCatManager(); openSheet("catSheet"); }
+$("meCats").addEventListener("click",openCats);
+$("catTypes").addEventListener("click",e=>{ const b=e.target.closest("[data-ct]"); if(!b) return; catType=b.dataset.ct; renderCatManager(); });
+$("catForm").addEventListener("submit",async ev=>{
+  ev.preventDefault(); const n=$("catNew").value.trim(), err=$("catErr"); err.hidden=true;
+  if(!n){ err.textContent=t("errCatName"); err.hidden=false; return; }
+  const key=catKey(n);
+  if(CATS[catType].some(k=>k.toLowerCase()===key.toLowerCase()) || S.cats.some(c=>c.type===catType&&c.name.toLowerCase()===key.toLowerCase())){ err.textContent=t("errCatExists"); err.hidden=false; return; }
+  $("catNew").value="";
+  try{ await store.setCat(uid(),{type:catType,name:key,createdAt:Date.now()}); renderCatManager(); toast(t("catAdded")); }
+  catch(e){ toast(saveError(e)); }
+});
+$("catMine").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-delcat]"); if(!b) return;
+  if(!b.classList.contains("confirm")){ b.classList.add("confirm"); b.textContent=t("tapAgain"); return; }
+  try{ await store.delCat(b.dataset.delcat); renderCatManager(); toast(t("catDeleted")); }catch(x){ toast(saveError(x)); }
+});
+
 let bootedFor=null, pendingMsg="";
 async function startSession(session){
-  if(!session){ bootedFor=null; ME=null; S.accounts=[]; S.entries=[]; S.people=[]; S.accReady=S.entReady=S.pplReady=false; showAuth(true); setAuthMode(authMode==="reset"?"in":authMode); if(pendingMsg){ authMsg(pendingMsg); pendingMsg=""; } return; }
+  if(!session){ bootedFor=null; ME=null; S.accounts=[]; S.entries=[]; S.people=[]; S.cats=[]; S.accReady=S.entReady=S.pplReady=false; showAuth(true); setAuthMode("in"); if(pendingMsg){ authMsg(pendingMsg); pendingMsg=""; } return; }
   if(bootedFor===session.user.id) return;
   bootedFor=session.user.id;
   let prof=null, profErr=false;
