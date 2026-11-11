@@ -1,6 +1,9 @@
 -- Daftar database schema for Supabase.
 -- Run this once in Supabase → SQL Editor → New query → paste → Run.
--- It is safe to run again: it only creates what is missing and replaces functions/policies.
+-- It is safe to run again (idempotent): it only creates what is missing and
+-- replaces functions/policies, and every constraint/trigger/grant below is
+-- added with drop-if-exists or guarded DO blocks, so re-running changes nothing
+-- and never deletes or mutates existing data.
 
 -- ---------------------------------------------------------------
 -- Profiles: one row per login, created automatically on sign-up.
@@ -84,13 +87,17 @@ language sql stable security definer set search_path = public as $$
   select exists(select 1 from public.profiles where id = auth.uid() and not disabled);
 $$;
 
--- New sign-up → profile row. The very first user to sign up becomes admin.
+-- New sign-up → profile row. New sign-ups ALWAYS get role 'user'; we never
+-- auto-grant admin. The owner is already admin, so the old "first signup becomes
+-- admin when profiles is empty" rule is a re-open hole: if the sole admin's auth
+-- user were ever deleted, the next signup would silently become admin. To grant
+-- a further admin, use the back office, or run:
+--   update public.profiles set role='admin' where email='someone@example.com';
 create or replace function public.handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
   insert into public.profiles(id, email, full_name, role)
-  values (new.id, new.email, coalesce(new.raw_user_meta_data->>'full_name',''),
-          case when exists(select 1 from public.profiles) then 'user' else 'admin' end)
+  values (new.id, new.email, coalesce(new.raw_user_meta_data->>'full_name',''), 'user')
   on conflict (id) do nothing;
   return new;
 end $$;
@@ -171,13 +178,123 @@ create or replace view public.admin_entries with (security_invoker = true) as
   join public.profiles p on p.id = e.user_id
   left join public.accounts a  on a.id  = e.account
   left join public.accounts ta on ta.id = e.to_account
-  left join public.people  pe on pe.id = e.person;
+  left join public.people  pe on pe.id = e.person
+  where public.is_admin();
 
 create or replace view public.admin_users with (security_invoker = true) as
   select p.*,
          (select count(*) from public.accounts a where a.user_id = p.id) as accounts_count,
          (select count(*) from public.entries  e where e.user_id = p.id) as entries_count,
          (select max(e.updated_at) from public.entries e where e.user_id = p.id) as last_activity
-  from public.profiles p;
+  from public.profiles p
+  where public.is_admin();
 
+grant select on public.admin_entries, public.admin_users to authenticated;
+
+-- ===============================================================
+-- Hardening (added later; all idempotent and safe to re-run).
+-- The create-table bodies above are no-ops on the live database
+-- (the tables already exist), so these new constraints/triggers
+-- are applied with ALTER / drop-then-add instead.
+-- ===============================================================
+
+-- ---------------------------------------------------------------
+-- 1. Amount integrity on entries.
+--    to_amount must be null or positive; amount has a sanity cap.
+--    (Existing real rows have short notes and positive amounts,
+--     with to_amount null or positive, so these all pass.)
+-- ---------------------------------------------------------------
+alter table public.entries drop constraint if exists entries_to_amount_pos;
+alter table public.entries add  constraint entries_to_amount_pos
+  check (to_amount is null or to_amount > 0);
+
+alter table public.entries drop constraint if exists entries_amount_sane;
+alter table public.entries add  constraint entries_amount_sane
+  check (amount < 1e15);
+
+-- ---------------------------------------------------------------
+-- 2. Text length caps (stop oversized-row abuse).
+--    All existing data is short, so every check below passes.
+-- ---------------------------------------------------------------
+alter table public.entries   drop constraint if exists entries_note_len;
+alter table public.entries   add  constraint entries_note_len
+  check (char_length(note) <= 500);
+
+alter table public.entries   drop constraint if exists entries_category_len;
+alter table public.entries   add  constraint entries_category_len
+  check (category is null or char_length(category) <= 120);
+
+alter table public.accounts  drop constraint if exists accounts_name_len;
+alter table public.accounts  add  constraint accounts_name_len
+  check (char_length(name) <= 120);
+
+alter table public.people    drop constraint if exists people_name_len;
+alter table public.people    add  constraint people_name_len
+  check (char_length(name) <= 120);
+
+alter table public.categories drop constraint if exists categories_name_len;
+alter table public.categories add  constraint categories_name_len
+  check (char_length(name) <= 120);
+
+alter table public.profiles  drop constraint if exists profiles_full_name_len;
+alter table public.profiles  add  constraint profiles_full_name_len
+  check (char_length(full_name) <= 120);
+
+-- ---------------------------------------------------------------
+-- 3. Per-user row quotas (main abuse vector: scripting thousands
+--    of rows in one statement). before-insert triggers reject an
+--    insert once the user is at/over the cap. Caps are far above
+--    current usage (max is 7 entries / 4 people today), so normal
+--    use is never blocked.
+--      entries <= 20000, accounts <= 200, people <= 1000, categories <= 500
+-- ---------------------------------------------------------------
+create or replace function public.enforce_row_quota() returns trigger
+language plpgsql security definer set search_path = public as $$
+declare
+  cap integer := tg_argv[0]::integer;
+  n   integer;
+begin
+  execute format('select count(*) from public.%I where user_id = $1', tg_table_name)
+    into n using new.user_id;
+  if n >= cap then
+    raise exception 'Row limit reached for % (max % per user)', tg_table_name, cap
+      using errcode = 'check_violation';
+  end if;
+  return new;
+end $$;
+
+drop trigger if exists entries_quota on public.entries;
+create trigger entries_quota before insert on public.entries
+  for each row execute function public.enforce_row_quota('20000');
+
+drop trigger if exists accounts_quota on public.accounts;
+create trigger accounts_quota before insert on public.accounts
+  for each row execute function public.enforce_row_quota('200');
+
+drop trigger if exists people_quota on public.people;
+create trigger people_quota before insert on public.people
+  for each row execute function public.enforce_row_quota('1000');
+
+drop trigger if exists categories_quota on public.categories;
+create trigger categories_quota before insert on public.categories
+  for each row execute function public.enforce_row_quota('500');
+
+-- ---------------------------------------------------------------
+-- 5b. Tighten grants (defense-in-depth). The app uses the
+--     authenticated role after login; signup goes through auth,
+--     not these tables, so anon needs no table privileges.
+--     RLS still gates which rows authenticated users can touch.
+-- ---------------------------------------------------------------
+revoke all on public.profiles   from anon;
+revoke all on public.accounts   from anon;
+revoke all on public.people     from anon;
+revoke all on public.entries    from anon;
+revoke all on public.categories from anon;
+revoke all on public.admin_entries from anon;
+revoke all on public.admin_users  from anon;
+
+-- Keep the normal logged-in flow working.
+grant select, insert, update, delete
+  on public.profiles, public.accounts, public.people, public.entries, public.categories
+  to authenticated;
 grant select on public.admin_entries, public.admin_users to authenticated;

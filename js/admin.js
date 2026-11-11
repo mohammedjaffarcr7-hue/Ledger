@@ -80,29 +80,38 @@ async function loadDash(){
     const now=new Date(), m0=ymd(new Date(now.getFullYear(),now.getMonth(),1)), d30=new Date(Date.now()-30*864e5).toISOString();
     const [users, all, month, latest] = await Promise.all([
       must(sb.from("admin_users").select("*").order("created_at",{ascending:false})),
-      must(sb.from("entries").select("id",{count:"exact",head:true})),
+      must(sb.from("entries").select("id",{count:"estimated",head:true})),
       fetchRange(q=>q.gte("date",m0)),
       must(sb.from("admin_entries").select("*").order("updated_at",{ascending:false}).limit(10))
     ]);
     A.users=users; fillUserFilter();
+    // Estimated count uses planner stats (no full scan). It comes back null only for a
+    // small/un-analysed table, where an exact count is cheap — fall back to it there.
+    let txCount=all.count;
+    if(txCount==null) txCount=(await must(sb.from("entries").select("id",{count:"exact",head:true}))).count||0;
     const active=users.filter(u=>u.last_activity && u.last_activity>=d30).length;
     const disabled=users.filter(u=>u.disabled).length;
     $("kpis").innerHTML=[
-      ["Users",users.length,""], ["Active in 30 days",active,"good"], ["Transactions",all.count,""], ["This month",month.length,""], ["Disabled",disabled,disabled?"bad":""]
+      ["Users",users.length,""], ["Active in 30 days",active,"good"], ["Transactions",txCount,""], ["This month",month.length,""], ["Disabled",disabled,disabled?"bad":""]
     ].slice(0,4).map(([l,n,c])=>`<div class="rtile ${c}"><span class="lbl">${esc(l)}</span><span class="n">${n.toLocaleString("en-US")}</span></div>`).join("");
     $("dashMonth").textContent=now.toLocaleDateString("en-GB",{month:"long",year:"numeric"});
     const by={}; month.forEach(e=>{ const c=curOfEntry(e); by[c]??={i:0,o:0,n:0}; by[c].n++;
       if(e.type==="income" && !/^opening/i.test(e.category||"")) by[c].i+=+e.amount; else if(e.type==="expense") by[c].o+=+e.amount; });
     const cs=Object.keys(by);
     $("dashCur").innerHTML = cs.length ? `<table class="mstats"><thead><tr><th>Currency</th><th>Entries</th><th>Income</th><th>Spent</th></tr></thead><tbody>${
-      cs.map(c=>`<tr><td>${esc(c)}</td><td>${by[c].n}</td><td class="pos">${fmt(by[c].i,c)}</td><td class="neg">${fmt(by[c].o,c)}</td></tr>`).join("")}</tbody></table>`
+      cs.map(c=>`<tr><td>${esc(c)}</td><td>${by[c].n}</td><td class="pos">${fmt(by[c].i,c)}</td><td class="neg">${fmt(by[c].o,c)}</td></tr>`).join("")}</tbody></table>${
+      month.capped?`<div class="hint" style="margin-top:8px">Approximate — based on the most recent ${month.length.toLocaleString("en-US")} entries this month.</div>`:""}`
       : `<div class="empty-sm">Nothing recorded this month yet.</div>`;
     $("dashUsers").innerHTML = users.length ? `<div class="dash-u">${users.slice(0,6).map(u=>`<button class="arow" type="button" data-user="${esc(u.id)}"><span class="ico avatar">${esc(avatarOf(u))}</span><span style="min-width:0"><div class="nm">${esc(userLabel(u))}</div><div class="kd">${esc(u.email||"")}</div></span><span class="hint">${esc(dshort(u.created_at))}</span></button>`).join("")}</div>` : `<div class="empty-sm">No users yet.</div>`;
     $("dashTx").innerHTML = txTable(latest,true);
   }catch(e){ $("kpis").innerHTML=`<div class="rtile bad"><span class="err">${esc(errMsg(e))}</span></div>`; }
 }
 async function fetchRange(apply){
-  const out=[]; for(let from=0;;from+=1000){ const rows=await must(apply(sb.from("admin_entries").select("*")).order("id").range(from,from+999)); out.push(...rows); if(rows.length<1000) break; } return out;
+  // Cap the pull so the dashboard stays responsive no matter how many rows exist:
+  // at most 5 pages of 1000 (5000 rows). out.capped flags that the sample was truncated.
+  const out=[], MAXP=5; out.capped=false;
+  for(let p=0;p<MAXP;p++){ const from=p*1000; const rows=await must(apply(sb.from("admin_entries").select("*")).order("id").range(from,from+999)); out.push(...rows); if(rows.length<1000) break; if(p===MAXP-1) out.capped=true; }
+  return out;
 }
 
 /* ---------- users ---------- */

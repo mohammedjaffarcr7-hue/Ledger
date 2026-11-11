@@ -1,5 +1,5 @@
 // Bump VERSION whenever you deploy changes (or change the app icon) so phones pick them up.
-const VERSION = "daftar-v6";
+const VERSION = "daftar-v7";
 const SHELL = ["./", "index.html", "admin.html", "css/app.css", "css/admin.css", "js/app.js", "js/admin.js", "js/pwa.js",
   "config.js", "vendor/supabase.js", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
