@@ -867,3 +867,14 @@ table.gl tr.edge td,.lsum{background:var(--soft)}
   .acc-grid .wadd{aspect-ratio:auto;min-height:64px;grid-auto-flow:column;gap:8px;border-radius:18px}
   .acc-grid .wadd span{font-size:20px!important}
 }
+/* statement of account */
+.sheet.wide-soa{width:min(560px,100%)}
+.soa-lang{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.soa-prev{background:var(--soft);border-radius:18px;padding:10px;min-height:120px;display:grid;place-items:center}
+.soa-img{width:100%;height:auto;display:block;border-radius:12px}
+.soa-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:sticky;bottom:0;background:var(--surface);padding-top:8px}
+.soa-actions .btn{justify-content:center}
+.soa-actions .btn.primary{grid-column:1/-1}
+@media (max-width:720px){ .sheet.wide-soa{max-height:94%} }
+.soa-actions .btn:not(.primary){background:var(--soft)} .soa-actions .btn:not(.primary):hover{background:var(--soft2)}
+.soa-actions #soaPdf{grid-column:1/-1}

@@ -5,6 +5,8 @@ const $$ = s => [...document.querySelectorAll(s)];
 /* ---------- language ---------- */
 const I18N = {
   en:{
+    soaBtn:"Send statement", soaH:"Statement of account", soaSub:"Every debt record with this person, with the running balance. Send it as a picture, as text, or save it as a PDF.",
+    soaLangL:"Statement language", soaImg:"Share as image", soaTxt:"Share as text", soaWa:"WhatsApp", soaPdf:"Print or save PDF", soaSaved:"Statement saved", soaCopied:"Statement copied. Paste it in any chat.",
     myCats:"My categories", manageCats:"Manage categories", catsSub:"Add your own categories. They appear when you record an entry, alongside the general ones.",
     newCatPh:"New category name", addCat:"Add", ownCats:"Yours", builtInCats:"General categories", noOwnCats:"You haven't added any yet.",
     errCatName:"Type a name for the category.", errCatExists:"That category already exists.", catAdded:"Category added", catDeleted:"Category deleted",
@@ -73,6 +75,8 @@ const I18N = {
     demo:"Preview with example figures. Nothing you enter here is saved.", unavailable:"This ledger isn't available to you right now.", lost:"Lost the connection to your ledger. Reload the page to reconnect."
   },
   ar:{
+    soaBtn:"إرسال كشف حساب", soaH:"كشف حساب", soaSub:"كل حركات الدين مع هذا الشخص مع الرصيد الجاري. أرسله كصورة أو نص، أو احفظه PDF.",
+    soaLangL:"لغة الكشف", soaImg:"مشاركة كصورة", soaTxt:"مشاركة كنص", soaWa:"واتساب", soaPdf:"طباعة أو حفظ PDF", soaSaved:"تم حفظ الكشف", soaCopied:"تم نسخ الكشف. الصقه في أي محادثة.",
     myCats:"فئاتي", manageCats:"إدارة الفئات", catsSub:"أضف فئاتك الخاصة. تظهر عند تسجيل أي قيد، إلى جانب الفئات العامة.",
     newCatPh:"اسم الفئة الجديدة", addCat:"إضافة", ownCats:"فئاتك", builtInCats:"الفئات العامة", noOwnCats:"لم تضف أي فئة بعد.",
     errCatName:"اكتب اسماً للفئة.", errCatExists:"هذه الفئة موجودة مسبقاً.", catAdded:"تمت إضافة الفئة", catDeleted:"تم حذف الفئة",
@@ -185,7 +189,7 @@ const ICONS = {
   "k-other":'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>'
 };
 const TYPE_EN = {income:"Income", expense:"Expense", transfer:"Transfer", exchange:"Exchange", debt:"Debt"};
-const SHEETS = ["entrySheet","acctSheet","personSheet","meSheet","catSheet"];
+const SHEETS = ["entrySheet","acctSheet","personSheet","meSheet","catSheet","soaSheet"];
 // Effect of a debt record on what a person owes you (+) or you owe them (−).
 function debtDelta(e){ const a=+e.amount||0; return {lent:a, repaid:a, borrowed:-a, collected:-a}[e.dir]||0; }
 // Cash effect on the account: lending and repaying take money out; borrowing and being repaid bring it in.
@@ -905,6 +909,7 @@ document.addEventListener("click",ev=>{
   if(el.closest("[data-backppl]")){ S.person=null; return renderPeople(); }
   const ep=el.closest("[data-editperson]"); if(ep) return openPerson(ep.dataset.editperson);
   if(el.closest("[data-addperson]")) return openPerson(null);
+  const so=el.closest("[data-soa]"); if(so) return openSOA(so.dataset.soa);
   if(el.closest("[data-adddebt]")) return openNewEntry(null,{type:"debt", person:S.view==="people"?S.person:null});
   const df=el.closest("[data-debtfor]"); if(df) return openNewEntry(null,{type:"debt", person:df.dataset.debtfor});
   const st=el.closest("[data-settle]"); if(st) return openNewEntry(null,{type:"debt", dir:st.dataset.settle, person:S.person, cur:st.dataset.cur, amount:+st.dataset.amt});
@@ -1117,6 +1122,7 @@ function personDetail(pid){
       <div class="actions">
         ${owesMe?`<button class="btn small primary" type="button" data-settle="collected" data-cur="${esc(owesMe[0])}" data-amt="${owesMe[1]}">${t("theyPaid")}</button>`:""}
         ${iOwe?`<button class="btn small primary" type="button" data-settle="repaid" data-cur="${esc(iOwe[0])}" data-amt="${-iOwe[1]}">${t("iPaid")}</button>`:""}
+        <button class="btn small" type="button" data-soa="${esc(pid)}">${t("soaBtn")}</button>
         <button class="btn small" type="button" data-debtfor="${esc(pid)}">${t("newDebt")}</button>
         <button class="btn small ghost" type="button" data-editperson="${esc(pid)}">${t("editPersonBtn")}</button>
       </div></div>
@@ -1125,6 +1131,168 @@ function personDetail(pid){
     <div class="hint" style="padding:12px 18px">${esc(t("debtBalHint"))}</div>
   </div>`;
 }
+/* ---------- statement of account (SOA) with one person ----------
+   Written so it can be sent to the other person: names on both sides, neutral wording,
+   every debt record, a running balance per currency and the closing "who owes whom". */
+const SOA_T={
+  en:{title:"Statement of Account", between:"Between {a} and {b}", issued:"Issued {d}", period:"All transactions to {d}",
+    date:"Date", desc:"Description", by:"Paid by {n}", bal:"Balance",
+    lent:"{a} lent {b}", borrowed:"{b} lent {a}", collected:"{b} paid back {a}", repaid:"{a} paid back {b}",
+    owes:"{x} owes {y}", settled:"Settled, nobody owes anything", total:"Totals", closing:"Closing balance",
+    count:n=>n===1?"1 transaction":`${n} transactions`, made:"Made with Daftar", none:"No transactions recorded yet."},
+  ar:{title:"كشف حساب", between:"بين {a} و{b}", issued:"صدر في {d}", period:"جميع الحركات حتى {d}",
+    date:"التاريخ", desc:"البيان", by:"دفعه {n}", bal:"الرصيد",
+    lent:"{a} أقرض {b}", borrowed:"{b} أقرض {a}", collected:"{b} سدّد لـ{a}", repaid:"{a} سدّد لـ{b}",
+    owes:"{x} مدين لـ{y} بمبلغ", settled:"الحساب مسدَّد، لا ديون", total:"المجموع", closing:"الرصيد الختامي",
+    count:n=>n===1?"حركة واحدة":n===2?"حركتان":n<=10?`${n} حركات`:`${n} حركة`, made:"صُنع بتطبيق دفتر", none:"لا توجد حركات مسجلة بعد."}
+};
+let soaLang=LANG, soaPid=null, soaCanvas=null;
+function st(k,v){ let s=SOA_T[soaLang][k]; if(typeof s==="function") return s(v); return v?s.replace(/\{(\w+)\}/g,(m,n)=>v[n]??m):s; }
+function myName(){ return (ME?.full_name||"").trim() || (ME?.email||"").split("@")[0] || "Me"; }
+// a = me, b = them. "given by me" grows what they owe; "given by them" shrinks it.
+function buildSOA(pid){
+  const p=personById(pid), a=myName(), b=p?.name||"";
+  const rows=S.entries.filter(e=>e.type==="debt"&&e.person===pid)
+    .sort((x,y)=>(x.date||"").localeCompare(y.date||"")||(x.createdAt||0)-(y.createdAt||0));
+  const byCur={};
+  rows.forEach(e=>{ const c=curOf(e); (byCur[c]??={c,rows:[],mine:0,theirs:0,bal:0});
+    const g=byCur[c], amt=+e.amount||0, mine=(e.dir==="lent"||e.dir==="repaid");
+    if(mine) g.mine+=amt; else g.theirs+=amt; g.bal+=debtDelta(e);
+    g.rows.push({date:e.date, desc:st(e.dir,{a,b}), note:e.note||"", mine:mine?amt:0, theirs:mine?0:amt, bal:g.bal}); });
+  const cs=Object.values(byCur).sort((x,y)=>CUR_ORDER.indexOf(x.c)-CUR_ORDER.indexOf(y.c));
+  return {a,b,cs,n:rows.length};
+}
+function soaDate(d,long){ const dt=new Date((d||today())+"T00:00:00");
+  if(soaLang==="ar" && !long) return dt.toLocaleDateString("ar-IQ-u-nu-latn",{day:"2-digit",month:"2-digit",year:"numeric"});
+  return dt.toLocaleDateString(soaLang==="ar"?"ar-IQ-u-nu-latn":"en-GB",{day:"numeric",month:"short",year:"numeric"}); }
+function firstName(n){ return String(n||"").trim().split(/\s+/)[0]||n; }
+function soaBalanceLine(g,a,b){
+  if(Math.abs(g.bal)<1e-9) return st("settled");
+  return g.bal>0 ? `${st("owes",{x:b,y:a})} ${nfmt(g.bal,g.c)} ${g.c}` : `${st("owes",{x:a,y:b})} ${nfmt(-g.bal,g.c)} ${g.c}`;
+}
+function soaText(d){
+  const L=[`${st("title")}`, st("between",{a:d.a,b:d.b}), st("period",{d:soaDate(null,true)}), ""];
+  if(!d.n) L.push(st("none"));
+  d.cs.forEach(g=>{
+    if(d.cs.length>1) L.push(`— ${g.c} —`);
+    g.rows.forEach(r=>{ const amt=r.mine||r.theirs, sign=r.mine?"+":"−";
+      L.push(`${soaDate(r.date)} · ${r.desc}${r.note?` (${r.note})`:""}: ${nfmt(amt,g.c)} ${g.c}  → ${st("bal")}: ${r.bal<-1e-9?"−":""}${nfmt(r.bal,g.c)}`); });
+    L.push(`${st("closing")}: ${soaBalanceLine(g,d.a,d.b)}`, "");
+  });
+  L.push(st("made"));
+  return L.join("\n");
+}
+async function soaRender(d){
+  try{ await document.fonts?.ready; }catch(e){}
+  const rtl=soaLang==="ar", W=1080, P=56, S2=2;
+  const C={paper:"#F4F2ED", card:"#FFFFFF", soft:"#F1EEE7", line:"#E5E1D7", ink:"#16140F", muted:"#6F6A5F", green:"#164E3B", cream:"#F6F0DF", inC:"#13834A", outC:"#C2412D"};
+  const F=(w,s)=>`${w} ${s}px ${rtl?'"IBM Plex Sans Arabic","Geist"':'"Geist","IBM Plex Sans Arabic"'},system-ui,sans-serif`;
+  // columns in LTR coordinates (x0,x1); mirrored for Arabic
+  const cols={date:[P,P+170], desc:[P+180,W-P-510], mine:[W-P-500,W-P-330], theirs:[W-P-320,W-P-160], bal:[W-P-150,W-P]};
+  const cardH=g=>70+48+g.rows.reduce((s,r)=>s+ROW+(r.note?NOTE:0),0)+60+60+28;
+  const ROW=58, NOTE=26;
+  let H=350;
+  d.cs.forEach(g=>{ H+=cardH(g)+40; });
+  if(!d.n) H+=90;
+  H+=60;
+  const cv=document.createElement("canvas"); cv.width=W*S2; cv.height=H*S2;
+  const x=cv.getContext("2d"); x.scale(S2,S2); x.textBaseline="alphabetic";
+  const X=(x0,x1)=>rtl?[W-x1,W-x0]:[x0,x1];
+  function txt(s,[x0,x1],y,{font,color=C.ink,align="start",num=false}={}){
+    x.font=font||F(500,22); x.fillStyle=color;
+    const [a,b]=X(x0,x1), w=b-a; let str=String(s);
+    x.direction=num?"ltr":(rtl?"rtl":"ltr");
+    while(str.length>1 && x.measureText(str).width>w) str=str.slice(0,-2)+"…";
+    const right=(align==="end")!==rtl;   // start in RTL = right edge
+    x.textAlign=right?"right":"left"; x.fillText(str,right?b:a,y);
+  }
+  // paper
+  x.fillStyle=C.paper; x.fillRect(0,0,W,H);
+  // header band
+  x.fillStyle=C.green; x.beginPath(); x.roundRect(P/2,P/2,W-P,260,28); x.fill();
+  txt(st("title"),[P+24,W-P-24],P/2+78,{font:F(700,46),color:C.cream});
+  txt(st("between",{a:d.a,b:d.b}),[P+24,W-P-24],P/2+126,{font:F(500,26),color:"rgba(246,240,223,.85)"});
+  txt(st("period",{d:soaDate(null,true)})+" · "+st("count",d.n),[P+24,W-P-24],P/2+164,{font:F(500,20),color:"rgba(246,240,223,.65)"});
+  // closing balance(s) in the band
+  let by=P/2+222;
+  const lines=d.cs.length?d.cs.map(g=>soaBalanceLine(g,d.a,d.b)):[st("none")];
+  txt(lines.join("   ·   "),[P+24,W-P-24],by,{font:F(700,28),color:C.cream});
+  let y=P/2+260+50;
+  if(!d.n){ txt(st("none"),[P,W-P],y+40,{font:F(500,24),color:C.muted}); y+=90; }
+  d.cs.forEach(g=>{
+    // card
+    const top=y;
+    x.fillStyle=C.card; x.beginPath(); x.roundRect(P/2,y,W-P,cardH(g),24); x.fill();
+    txt(g.c,[P,W-P],y+46,{font:F(700,26)});
+    y+=70;
+    // header
+    x.fillStyle=C.soft; x.fillRect(P/2,y,W-P,48);
+    const hf={font:F(600,17),color:C.muted};
+    txt(st("date"),cols.date,y+31,hf); txt(st("desc"),cols.desc,y+31,hf);
+    txt(st("by",{n:firstName(d.a)}),cols.mine,y+31,{...hf,align:"end"}); txt(st("by",{n:firstName(d.b)}),cols.theirs,y+31,{...hf,align:"end"});
+    txt(st("bal"),cols.bal,y+31,{...hf,align:"end"});
+    y+=48;
+    g.rows.forEach(r=>{
+      const h2=ROW+(r.note?NOTE:0);
+      txt(soaDate(r.date),cols.date,y+37,{font:F(500,20),color:C.muted});
+      txt(r.desc,cols.desc,y+37,{font:F(600,21)});
+      if(r.note) txt(r.note,cols.desc,y+37+NOTE,{font:F(400,18),color:C.muted});
+      if(r.mine) txt(nfmt(r.mine,g.c),cols.mine,y+37,{font:F(600,21),align:"end",num:true});
+      if(r.theirs) txt(nfmt(r.theirs,g.c),cols.theirs,y+37,{font:F(600,21),align:"end",num:true});
+      txt((r.bal<-1e-9?"−":"")+nfmt(r.bal,g.c),cols.bal,y+37,{font:F(700,21),align:"end",num:true,color:r.bal>1e-9?C.inC:r.bal<-1e-9?C.outC:C.ink});
+      y+=h2; x.fillStyle=C.line; x.fillRect(P,y,W-2*P,1);
+    });
+    // totals
+    txt(st("total"),cols.desc,y+40,{font:F(700,21)});
+    txt(nfmt(g.mine,g.c),cols.mine,y+40,{font:F(700,21),align:"end",num:true});
+    txt(nfmt(g.theirs,g.c),cols.theirs,y+40,{font:F(700,21),align:"end",num:true});
+    y+=60;
+    x.fillStyle=Math.abs(g.bal)<1e-9?C.soft:(g.bal>0?"#DDF1E4":"#F8E5E0"); x.beginPath(); x.roundRect(P,y,W-2*P,60,16); x.fill();
+    txt(st("closing")+": "+soaBalanceLine(g,d.a,d.b),[P+20,W-P-20],y+39,{font:F(700,23),color:Math.abs(g.bal)<1e-9?C.ink:(g.bal>0?C.inC:C.outC)});
+    y=top+cardH(g)+40;
+  });
+  txt(st("made")+" · "+st("issued",{d:soaDate(null,true)}),[P,W-P],H-34,{font:F(500,18),color:C.muted});
+  return cv;
+}
+async function openSOA(pid){
+  soaPid=pid; soaLang=LANG;
+  $$("#soaLang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.sl===soaLang?"true":"false"));
+  $("soaPrev").innerHTML=`<div class="hint">${esc(t("loading"))}</div>`;
+  openSheet("soaSheet"); await paintSOA();
+}
+async function paintSOA(){
+  const d=buildSOA(soaPid); soaCanvas=await soaRender(d);
+  const img=new Image(); img.alt=st("title")+" · "+d.b; img.src=soaCanvas.toDataURL("image/png"); img.className="soa-img";
+  $("soaPrev").replaceChildren(img);
+}
+function soaFileName(ext){ const b=(personById(soaPid)?.name||"person").replace(/[\\/:*?"<>|]+/g,"").trim(); return `${soaLang==="ar"?"كشف حساب":"Statement"} - ${b} - ${today()}.${ext}`; }
+$("soaLang").addEventListener("click",async e=>{ const b=e.target.closest("[data-sl]"); if(!b) return; soaLang=b.dataset.sl;
+  $$("#soaLang button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false")); await paintSOA(); });
+$("soaImg").addEventListener("click",async ()=>{
+  if(!soaCanvas) return;
+  const blob=await new Promise(r=>soaCanvas.toBlob(r,"image/png"));
+  const file=new File([blob],soaFileName("png"),{type:"image/png"});
+  try{
+    if(navigator.canShare?.({files:[file]})) await navigator.share({files:[file],title:st("title")});
+    else { downloadFile(file.name,blob,"image/png"); toast(t("soaSaved")); }
+  }catch(e){ if(e?.name!=="AbortError") toast(t("exportFail")); }
+});
+$("soaTxt").addEventListener("click",async ()=>{
+  const text=soaText(buildSOA(soaPid));
+  try{
+    if(navigator.share) await navigator.share({title:st("title"),text});
+    else { await navigator.clipboard.writeText(text); toast(t("soaCopied")); }
+  }catch(e){ if(e?.name!=="AbortError"){ try{ await navigator.clipboard.writeText(text); toast(t("soaCopied")); }catch(x){ toast(t("exportFail")); } } }
+});
+$("soaWa").addEventListener("click",()=>{ window.open("https://wa.me/?text="+encodeURIComponent(soaText(buildSOA(soaPid))),"_blank","noopener"); });
+$("soaPdf").addEventListener("click",()=>{
+  if(!soaCanvas) return;
+  const w=window.open("","_blank");
+  if(!w){ soaCanvas.toBlob(bl=>downloadFile(soaFileName("png"),bl,"image/png"),"image/png"); return; }
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(soaFileName("pdf").replace(/\.pdf$/,""))}</title><style>@page{margin:10mm}html,body{margin:0;background:#fff}img{width:100%;display:block}</style></head><body><img src="${soaCanvas.toDataURL("image/png")}" onload="setTimeout(()=>print(),150)"></body></html>`);
+  w.document.close();
+});
+
 function personErr(m){ const e=$("personErr"); e.textContent=m||""; e.hidden=!m; }
 function openPerson(id){
   const p=id?personById(id):null; S.editPerson=p?id:null; personErr("");
