@@ -5,8 +5,8 @@ const $$ = s => [...document.querySelectorAll(s)];
 /* ---------- language ---------- */
 const I18N = {
   en:{
-    soaBtn:"Send statement", soaH:"Statement of account", soaSub:"Every debt record with this person, with the running balance. Send it as a picture, as text, or save it as a PDF.",
-    soaLangL:"Statement language", soaImg:"Share as image", soaTxt:"Share as text", soaWa:"WhatsApp", soaPdf:"Print or save PDF", soaSaved:"Statement saved", soaCopied:"Statement copied. Paste it in any chat.",
+    soaBtn:"Send statement", soaH:"Statement of account", soaSub:"Every debt record with this person, with the running balance. Send it as a PDF, a picture or text.",
+    soaLangL:"Statement language", soaImg:"Share as image", soaTxt:"Share as text", soaWa:"Send PDF (WhatsApp…)", soaPdf:"Save PDF", soaSaved:"Statement saved", soaCopied:"Statement copied. Paste it in any chat.",
     myCats:"My categories", manageCats:"Manage categories", catsSub:"Add your own categories. They appear when you record an entry, alongside the general ones.",
     newCatPh:"New category name", addCat:"Add", ownCats:"Yours", builtInCats:"General categories", noOwnCats:"You haven't added any yet.",
     errCatName:"Type a name for the category.", errCatExists:"That category already exists.", catAdded:"Category added", catDeleted:"Category deleted",
@@ -75,8 +75,8 @@ const I18N = {
     demo:"Preview with example figures. Nothing you enter here is saved.", unavailable:"This ledger isn't available to you right now.", lost:"Lost the connection to your ledger. Reload the page to reconnect."
   },
   ar:{
-    soaBtn:"إرسال كشف حساب", soaH:"كشف حساب", soaSub:"كل حركات الدين مع هذا الشخص مع الرصيد الجاري. أرسله كصورة أو نص، أو احفظه PDF.",
-    soaLangL:"لغة الكشف", soaImg:"مشاركة كصورة", soaTxt:"مشاركة كنص", soaWa:"واتساب", soaPdf:"طباعة أو حفظ PDF", soaSaved:"تم حفظ الكشف", soaCopied:"تم نسخ الكشف. الصقه في أي محادثة.",
+    soaBtn:"إرسال كشف حساب", soaH:"كشف حساب", soaSub:"كل حركات الدين مع هذا الشخص مع الرصيد الجاري. أرسله كملف PDF أو صورة أو نص.",
+    soaLangL:"لغة الكشف", soaImg:"مشاركة كصورة", soaTxt:"مشاركة كنص", soaWa:"إرسال PDF (واتساب…)", soaPdf:"حفظ PDF", soaSaved:"تم حفظ الكشف", soaCopied:"تم نسخ الكشف. الصقه في أي محادثة.",
     myCats:"فئاتي", manageCats:"إدارة الفئات", catsSub:"أضف فئاتك الخاصة. تظهر عند تسجيل أي قيد، إلى جانب الفئات العامة.",
     newCatPh:"اسم الفئة الجديدة", addCat:"إضافة", ownCats:"فئاتك", builtInCats:"الفئات العامة", noOwnCats:"لم تضف أي فئة بعد.",
     errCatName:"اكتب اسماً للفئة.", errCatExists:"هذه الفئة موجودة مسبقاً.", catAdded:"تمت إضافة الفئة", catDeleted:"تم حذف الفئة",
@@ -1284,13 +1284,38 @@ $("soaTxt").addEventListener("click",async ()=>{
     else { await navigator.clipboard.writeText(text); toast(t("soaCopied")); }
   }catch(e){ if(e?.name!=="AbortError"){ try{ await navigator.clipboard.writeText(text); toast(t("soaCopied")); }catch(x){ toast(t("exportFail")); } } }
 });
-$("soaWa").addEventListener("click",()=>{ window.open("https://wa.me/?text="+encodeURIComponent(soaText(buildSOA(soaPid))),"_blank","noopener"); });
+// A real one-page PDF built in the app: the statement picture as a JPEG inside a minimal PDF file.
+function soaPdfBlob(){
+  const bin=atob(soaCanvas.toDataURL("image/jpeg",0.92).split(",")[1]), jpg=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) jpg[i]=bin.charCodeAt(i);
+  const W=soaCanvas.width, H=soaCanvas.height, pw=595, ph=Math.round(595*H/W);
+  const enc=new TextEncoder(), parts=[], offs=[]; let pos=0;
+  const add=x=>{ const u=typeof x==="string"?enc.encode(x):x; parts.push(u); pos+=u.length; };
+  const obj=(n,body)=>{ offs[n]=pos; add(`${n} 0 obj\n`); body(); add(`\nendobj\n`); };
+  const content=`q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`;
+  add("%PDF-1.4\n");
+  obj(1,()=>add("<< /Type /Catalog /Pages 2 0 R >>"));
+  obj(2,()=>add("<< /Type /Pages /Kids [3 0 R] /Count 1 >>"));
+  obj(3,()=>add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>`));
+  obj(4,()=>{ add(`<< /Type /XObject /Subtype /Image /Width ${W} /Height ${H} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`); add(jpg); add("\nendstream"); });
+  obj(5,()=>add(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`));
+  const xref=pos;
+  add(`xref\n0 6\n0000000000 65535 f \n`+[1,2,3,4,5].map(n=>String(offs[n]).padStart(10,"0")+" 00000 n \n").join(""));
+  add(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
+  return new Blob(parts,{type:"application/pdf"});
+}
+// Send the PDF through the phone's share menu (WhatsApp, Telegram, Mail…); saves it where sharing files isn't supported.
+$("soaWa").addEventListener("click",async ()=>{
+  if(!soaCanvas) return;
+  const blob=soaPdfBlob(), file=new File([blob],soaFileName("pdf"),{type:"application/pdf"});
+  try{
+    if(navigator.canShare?.({files:[file]})) await navigator.share({files:[file]});
+    else { downloadFile(file.name,blob,"application/pdf"); toast(t("soaSaved")); }
+  }catch(e){ if(e?.name!=="AbortError"){ downloadFile(file.name,blob,"application/pdf"); toast(t("soaSaved")); } }
+});
 $("soaPdf").addEventListener("click",()=>{
   if(!soaCanvas) return;
-  const w=window.open("","_blank");
-  if(!w){ soaCanvas.toBlob(bl=>downloadFile(soaFileName("png"),bl,"image/png"),"image/png"); return; }
-  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${esc(soaFileName("pdf").replace(/\.pdf$/,""))}</title><style>@page{margin:10mm}html,body{margin:0;background:#fff}img{width:100%;display:block}</style></head><body><img src="${soaCanvas.toDataURL("image/png")}" onload="setTimeout(()=>print(),150)"></body></html>`);
-  w.document.close();
+  try{ downloadFile(soaFileName("pdf"),soaPdfBlob(),"application/pdf"); toast(t("soaSaved")); }catch(e){ toast(t("exportFail")); }
 });
 
 function personErr(m){ const e=$("personErr"); e.textContent=m||""; e.hidden=!m; }
