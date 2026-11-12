@@ -1,7 +1,7 @@
 {
-  "name": "Daftar",
-  "short_name": "Daftar",
-  "description": "Your personal money ledger.",
+  "name": "Ledger",
+  "short_name": "Ledger",
+  "description": "Your personal double-entry money ledger.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

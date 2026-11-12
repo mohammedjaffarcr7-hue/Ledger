@@ -1,4 +1,4 @@
-// Daftar settings (Supabase project: Daftar).
+// Ledger settings (Supabase project).
 // The anon key is meant to be public: your data is protected by the
 // row-level security rules in supabase/schema.sql, not by hiding this key.
 window.DAFTAR_CONFIG = {

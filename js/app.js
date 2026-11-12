@@ -23,7 +23,7 @@ const I18N = {
     changePass:"Change password", newPass:"New password", setPass:"Set password", passChanged:"Password changed",
     dqToday:"Today", dqYest:"Yesterday", customCat:"New", customCatPh:"Type a category…",
     totalBalance:"Total balance", monthNet:"{v} this month", gm:"Good morning", ga:"Good afternoon", ge:"Good evening",
-    debts:"Debts", debtsSub:"Who owes you, and whom you owe.", newDebtBtn:"+ New debt", people:"People", viewAll:"View all →",
+    debts:"Debts", debtsSub:"Receivables and payables, by person.", newDebtBtn:"+ New debt", people:"People", viewAll:"View all →",
     owedToYou:"Owed to you", youOweTotal:"You owe", owesYou:"Owes you", youOwe:"You owe", settled:"All settled",
     noPeople:"No one yet. Tap “+ Add person” to add someone, or “+ New debt” to record money you lent or borrowed.", noDebts:"No debts recorded.",
     t_debt:"Debt", d_lent:"I lent", d_borrowed:"I borrowed", d_collected:"They paid me back", d_repaid:"I paid back",
@@ -32,16 +32,16 @@ const I18N = {
     errPerson:"Choose a person or type a new name.",
     title_lent:"Lent to {n}", title_borrowed:"Borrowed from {n}", title_collected:"{n} paid you back", title_repaid:"Paid back {n}",
     backPeople:"← All people", theyPaid:"They paid me back", iPaid:"I paid them back", newDebt:"New debt", what:"What",
-    noDebtTx:"Nothing recorded with this person yet.", debtBalHint:"Plus means they owe you. Minus means you owe them.",
+    noDebtTx:"Nothing recorded with this person yet.", debtBalHint:"A positive balance is a receivable (owed to you); negative is a payable (you owe).",
     newPerson:"New person", editPerson:"Edit person", personName:"Name", addPerson:"Add person", savePerson:"Save",
     personAdded:"Person added", personSaved:"Saved", personDeleted:"Person deleted", deletedPerson:"Deleted person",
     errPersonHas:n=>`This person has ${n} ${n===1?"record":"records"}. Delete them first.`, editPersonBtn:"Rename",
     noCashShort:"No cash moved",
-    sections:"Sections", overview:"Overview", ledger:"Ledger", accounts:"Accounts", switchLang:"Switch language", langName:"العربية",
+    sections:"Sections", overview:"Overview", ledger:"Ledger", accounts:"Accounts", switchLang:"Switch language", langName:"English",
     newEntryBtn:"+ New entry", newEntry:"New entry", editEntry:"Edit entry", ovSub:"Your money across every account",
     thisMonth:"This month", month:"Month", prevMonth:"Previous month", nextMonth:"Next month",
     recent:"Recent activity", openLedger:"Open ledger →", manage:"Manage →", byCategory:"Spending by category",
-    ledgerTitle:"Account ledger", ledgerSub:"Every transaction per account, with a running balance. Debit is money in, credit is money out.",
+    ledgerTitle:"Account ledger", ledgerSub:"Every transaction per account, with a running balance. Debit increases the account; credit decreases it.",
     export:"Export CSV", account:"Account", from:"From", to:"To", voucherType:"Voucher type", all:"All", search:"Search", searchPh:"Note, category or account…",
     r_month:"This month", r_last:"Last month", r_3m:"Last 3 months", r_year:"This year", r_all:"All time",
     accSub:"Cash, cards and digital wallets. Tap a card to see its ledger.", addAccountBtn:"+ Add account", addAccount:"Add account",
@@ -73,93 +73,22 @@ const I18N = {
     errQuota:"Storage is full. Export your data and delete old entries to make room.", errPerm:"You don't have permission to change this ledger.", errNet:"Couldn't save. Check your connection and try again.",
     noExport:"Export isn't available in this view", exportFail:"Export didn't complete",
     demo:"Preview with example figures. Nothing you enter here is saved.", unavailable:"This ledger isn't available to you right now.", lost:"Lost the connection to your ledger. Reload the page to reconnect."
-  },
-  ar:{
-    soaBtn:"إرسال كشف حساب", soaH:"كشف حساب", soaSub:"كل حركات الدين مع هذا الشخص مع الرصيد الجاري. أرسله كملف PDF أو صورة أو نص.",
-    soaLangL:"لغة الكشف", soaImg:"مشاركة كصورة", soaTxt:"مشاركة كنص", soaWa:"إرسال PDF (واتساب…)", soaPdf:"حفظ PDF", soaSaved:"تم حفظ الكشف", soaCopied:"تم نسخ الكشف. الصقه في أي محادثة.",
-    myCats:"فئاتي", manageCats:"إدارة الفئات", catsSub:"أضف فئاتك الخاصة. تظهر عند تسجيل أي قيد، إلى جانب الفئات العامة.",
-    newCatPh:"اسم الفئة الجديدة", addCat:"إضافة", ownCats:"فئاتك", builtInCats:"الفئات العامة", noOwnCats:"لم تضف أي فئة بعد.",
-    errCatName:"اكتب اسماً للفئة.", errCatExists:"هذه الفئة موجودة مسبقاً.", catAdded:"تمت إضافة الفئة", catDeleted:"تم حذف الفئة",
-    addPersonBtn:"+ إضافة شخص", peopleSub:"أضف أي شخص تقرضه أو تقترض منه. قائمتك لا يراها غيرك.",
-    signInH:"أهلاً بعودتك", signInSub:"سجّل الدخول إلى دفترك.", signUpH:"أنشئ حسابك", signUpSub:"دفترك الخاص، على أي هاتف.",
-    resetH:"إعادة تعيين كلمة المرور", resetSub:"سنرسل لك رابطاً لاختيار كلمة مرور جديدة.",
-    signInBtn:"تسجيل الدخول", signUpBtn:"إنشاء الحساب", resetBtn:"إرسال الرابط", noAccount:"جديد هنا؟ أنشئ حساباً", haveAccount:"لديك حساب؟ سجّل الدخول",
-    forgot:"نسيت كلمة المرور؟", email:"البريد الإلكتروني", password:"كلمة المرور", fullName:"الاسم الكامل", tryDemo:"جرّب النسخة التجريبية",
-    errEmail:"أدخل بريداً إلكترونياً صحيحاً.", errPass:"يجب ألا تقل كلمة المرور عن 6 أحرف.", errFull:"اكتب اسمك.",
-    errLogin:"البريد أو كلمة المرور غير صحيحة.", errExists:"لهذا البريد حساب مسبقاً. سجّل الدخول بدلاً من ذلك.", errConfirm:"أكّد بريدك الإلكتروني أولاً. تفقّد صندوق الوارد.",
-    errDisabled:"تم إيقاف هذا الحساب. تواصل مع المسؤول.", checkEmail:"تفقّد بريدك لتأكيد الحساب، ثم سجّل الدخول.",
-    resetSent:"إذا كان لهذا البريد حساب، فسيصلك رابط إعادة التعيين.", noConfig:"التطبيق غير متصل بالخادم بعد. أضف مفاتيح Supabase في config.js.",
-    myAccount:"حسابي", signOut:"تسجيل الخروج", backOffice:"فتح لوحة الإدارة", language:"اللغة", saveName:"حفظ الاسم",
-    changePass:"تغيير كلمة المرور", newPass:"كلمة المرور الجديدة", setPass:"تعيين", passChanged:"تم تغيير كلمة المرور",
-    dqToday:"اليوم", dqYest:"أمس", customCat:"جديدة", customCatPh:"اكتب اسم الفئة…",
-    totalBalance:"الرصيد الكلي", monthNet:"{v} هذا الشهر", gm:"صباح الخير", ga:"مساء الخير", ge:"مساء الخير",
-    debts:"الديون", debtsSub:"من يدين لك، ولمن أنت مدين.", newDebtBtn:"+ دين جديد", people:"الأشخاص", viewAll:"عرض الكل ←",
-    owedToYou:"لك عند الآخرين", youOweTotal:"عليك للآخرين", owesYou:"يدين لك بـ", youOwe:"أنت مدين له بـ", settled:"لا ديون",
-    noPeople:"لا يوجد أحد بعد. اضغط «+ إضافة شخص» لإضافة أحد، أو «+ دين جديد» لتسجيل مال أقرضته أو اقترضته.", noDebts:"لا توجد ديون مسجّلة.",
-    t_debt:"دين", d_lent:"أقرضت", d_borrowed:"اقترضت", d_collected:"سدّد لي", d_repaid:"سدّدت له",
-    person:"الشخص", personNewPh:"الاسم، مثلاً علي…", newPersonOpt:"+ شخص جديد…", noCash:"لا شيء، سجّل الدين فقط",
-    paidFrom:"دُفع من (اختياري)", receivedInto:"استُلم في (اختياري)", add_debt:"حفظ الدين", save_debt:"حفظ الدين",
-    errPerson:"اختر شخصاً أو اكتب اسماً جديداً.",
-    title_lent:"إقراض {n}", title_borrowed:"اقتراض من {n}", title_collected:"{n} سدّد لك", title_repaid:"سداد لـ {n}",
-    backPeople:"→ كل الأشخاص", theyPaid:"سدّد لي", iPaid:"سدّدت له", newDebt:"دين جديد", what:"الحركة",
-    noDebtTx:"لا توجد حركات مع هذا الشخص بعد.", debtBalHint:"الموجب يعني أنه مدين لك، والسالب يعني أنك مدين له.",
-    newPerson:"شخص جديد", editPerson:"تعديل الشخص", personName:"الاسم", addPerson:"إضافة الشخص", savePerson:"حفظ",
-    personAdded:"تمت إضافة الشخص", personSaved:"تم الحفظ", personDeleted:"تم حذف الشخص", deletedPerson:"شخص محذوف",
-    errPersonHas:n=>`لهذا الشخص ${n} ${n===1?"حركة":"حركات"}. احذفها أولاً.`, editPersonBtn:"تعديل الاسم",
-    noCashShort:"بدون حركة نقدية",
-    sections:"الأقسام", overview:"نظرة عامة", ledger:"دفتر الأستاذ", accounts:"الحسابات", switchLang:"تغيير اللغة", langName:"English",
-    newEntryBtn:"+ قيد جديد", newEntry:"قيد جديد", editEntry:"تعديل القيد", ovSub:"أموالك في جميع الحسابات",
-    thisMonth:"هذا الشهر", month:"الشهر", prevMonth:"الشهر السابق", nextMonth:"الشهر التالي",
-    recent:"آخر الحركات", openLedger:"فتح دفتر الأستاذ ←", manage:"إدارة ←", byCategory:"المصروفات حسب الفئة",
-    ledgerTitle:"دفتر أستاذ الحساب", ledgerSub:"كل حركة في كل حساب مع الرصيد الجاري. المدين هو المال الداخل، والدائن هو المال الخارج.",
-    export:"تصدير CSV", account:"الحساب", from:"من", to:"إلى", voucherType:"نوع السند", all:"الكل", search:"بحث", searchPh:"ملاحظة أو فئة أو حساب…",
-    r_month:"هذا الشهر", r_last:"الشهر الماضي", r_3m:"آخر 3 أشهر", r_year:"هذه السنة", r_all:"كل الفترات",
-    accSub:"النقد والبطاقات والمحافظ الرقمية. اضغط على أي بطاقة لعرض دفترها.", addAccountBtn:"+ إضافة حساب", addAccount:"إضافة حساب",
-    close:"إغلاق", entryType:"نوع القيد", t_income:"دخل", t_expense:"مصروف", t_transfer:"تحويل", t_exchange:"صرف عملة",
-    youPay:"تدفع", youReceive:"تستلم", amount:"المبلغ", fromAccount:"من حساب", intoAccount:"إلى حساب", toAccount:"إلى حساب",
-    category:"الفئة", date:"التاريخ", note:"ملاحظة", notePh:"غداء في كافتيريا الكلية…", rate:"السعر", delete:"حذف", tapAgain:"اضغط مرة أخرى للحذف",
-    add_expense:"إضافة مصروف", add_income:"إضافة دخل", add_transfer:"إضافة تحويل", add_exchange:"إضافة صرف",
-    save_expense:"حفظ المصروف", save_income:"حفظ الدخل", save_transfer:"حفظ التحويل", save_exchange:"حفظ الصرف",
-    amountReceivedIn:"المبلغ المستلم في {name} ({cur})", rateLbl:"السعر · <bdi dir=\"ltr\">1 {one} = ? {per}</bdi>",
-    rateHintEmpty:"اكتب السعر أو المبلغ الذي استلمته، والآخر يُحسب تلقائياً.", rateHint:"تدفع <bdi dir=\"ltr\">{pay} {pc}</bdi> وتستلم <bdi dir=\"ltr\">{recv} {rc}</bdi>.",
-    quickAdd:"إضافة سريعة", newAccount:"حساب جديد", editAccount:"تعديل الحساب", accName:"اسم الحساب", accNamePh:"حساب مصرفي", type:"النوع", currency:"العملة",
-    openingBal:"الرصيد الافتتاحي", openingHint:"المبلغ الموجود في الحساب قبل أن تبدأ التسجيل هنا.", createAccount:"إنشاء الحساب", saveAccount:"حفظ الحساب", viewLedger:"عرض دفتر الأستاذ",
-    loading:"جارٍ التحميل…", loadingLedger:"جارٍ تحميل دفترك…", noAccounts:"لا توجد حسابات بعد", addFirst:"+ أضف أول حساب", totalIn:"المجموع بـ {cur}",
-    nAccounts:n=>n===1?"حساب واحد":n===2?"حسابان":n<=10?`${n} حسابات`:`${n} حساباً`, colCurrency:"العملة", colIncome:"الدخل", colSpent:"المصروف", colNet:"الصافي", addAcctToStart:"أضف حساباً للبدء.",
-    openLedgerTitle:"فتح دفتر الأستاذ", noExpenses:"لا توجد مصروفات في {month}.", nothingYet:"لم تُسجَّل أي حركة بعد. اضغط «+ قيد جديد» لإضافة أول مصروف أو دخل.",
-    theStart:"البداية", today:"اليوم", rangeTxt:"من {from} إلى {to}", editAcctBtn:"تعديل الحساب", opening:"افتتاحي", closing:"ختامي", debitIn:"مدين · داخل", creditOut:"دائن · خارج",
-    postingDate:"تاريخ القيد", voucher:"السند", against:"الحساب المقابل", remarks:"ملاحظات", debit:"مدين", credit:"دائن", balance:"الرصيد",
-    openingBalance:"رصيد افتتاحي", closingBalance:"رصيد ختامي", total:"المجموع", filtered:" (مع التصفية)",
-    noTx:"لا توجد حركات في هذه الفترة.", noTxF:"لا توجد حركات تطابق هذه التصفية.", addAcctForLedger:"أضف حساباً لعرض دفتره.",
-    allAccounts:"جميع الحسابات، واحداً تلو الآخر", ledgerBtn:"الدفتر", edit:"تعديل", totalSuffix:"المجموع",
-    incomeDot:"دخل · {c}", expenseDot:"مصروف · {c}", deletedAccount:"حساب محذوف", exchangeTitle:"صرف {a} إلى {b}", arrow:"←",
-    errNoAcct:"أضف حساباً أولاً ثم سجّل القيود فيه.", errAmount:"أدخل مبلغاً أكبر من صفر.", errChoose:"اختر حساباً.",
-    errExAccts:"اختر الحساب الذي تدفع منه وحساباً آخر تستلم فيه.", errExAmt:"أدخل كم {cur} استلمت، أو اكتب السعر.",
-    errTrAccts:"اختر حسابين مختلفين للتحويل.", errTrAmt:"أدخل كم {cur} وصل إلى {name}.",
-    entryAdded:"تمت إضافة القيد", entryUpdated:"تم تحديث القيد", entryDeleted:"تم حذف القيد",
-    errName:"اكتب اسماً للحساب.", errOpening:"يجب أن يكون الرصيد الافتتاحي رقماً.", errCur:"لهذا الحساب قيود، لذلك لا يمكن تغيير عملته.",
-    errHasEntries:n=>`لهذا الحساب ${n} ${n===1?"قيد":"قيود"}. احذفها أو انقلها أولاً.`,
-    acctCreated:"تم إنشاء الحساب", acctSaved:"تم حفظ الحساب", acctDeleted:"تم حذف الحساب",
-    errQuota:"المساحة ممتلئة. صدّر بياناتك واحذف القيود القديمة.", errPerm:"ليست لديك صلاحية لتعديل هذا الدفتر.", errNet:"تعذّر الحفظ. تحقق من الاتصال وحاول مرة أخرى.",
-    noExport:"التصدير غير متاح هنا", exportFail:"لم يكتمل التصدير",
-    demo:"معاينة بأرقام تجريبية. لن يُحفظ أي شيء تدخله هنا.", unavailable:"هذا الدفتر غير متاح لك حالياً.", lost:"انقطع الاتصال بدفترك. أعد تحميل الصفحة."
   }
 };
-const CAT_AR = {"Food":"طعام ومطاعم","Groceries":"بقالة","Transport":"مواصلات","Fuel":"وقود","Car":"السيارة","Rent":"إيجار","Bills":"فواتير وخدمات","Phone & Internet":"هاتف وإنترنت","Home":"المنزل والصيانة","Health":"صحة","Personal care":"عناية شخصية","Clothes":"ملابس","Shopping":"تسوق","Education":"تعليم","Entertainment":"ترفيه","Travel":"سفر","Subscriptions":"اشتراكات","Family":"عائلة وأطفال","Pets":"حيوانات أليفة","Insurance":"تأمين","Gifts & Donations":"هدايا وتبرعات","Fees & Taxes":"رسوم وضرائب","Other":"أخرى","Salary":"راتب","Business":"عمل تجاري","Freelance":"عمل حر","Bonus":"مكافأة","Allowance":"مصروف","Investment":"استثمار","Rental income":"دخل إيجار","Gift":"هدية","Refund":"استرداد","Opening balance":"رصيد افتتاحي","Transfer":"تحويل","Exchange":"صرف عملة","Debt":"دين","University":"الجامعة","Books & Supplies":"كتب ومستلزمات","Gym":"نادي رياضي","Gifts":"هدايا","Scholarship":"منحة"};
-const KIND_AR = {"Cash":"نقد","Bank card":"بطاقة مصرفية","Prepaid card":"بطاقة مسبقة الدفع","Digital wallet":"محفظة رقمية","Savings":"ادخار","Other":"أخرى"};
-let LANG = "en";
-try{ const s=localStorage.getItem("daftar.lang"); if(s==="ar"||s==="en") LANG=s; }catch(e){}
+const CAT_AR = {};
+const KIND_AR = {};
+const LANG = "en";
 function t(k,vars){
-  let v = I18N[LANG][k]; if(v===undefined) v=I18N.en[k]; if(v===undefined) return k;
+  let v = I18N.en[k]; if(v===undefined) return k;
   if(typeof v==="function") return v(vars);
   if(vars) v=v.replace(/\{(\w+)\}/g,(m,n)=>vars[n]??m);
   return v;
 }
-function catLabel(c){ c=c||"Other"; return LANG==="ar" ? (CAT_AR[c]||c) : c; }
-function catKey(input){ const v=input.trim(); for(const [en,ar] of Object.entries(CAT_AR)) if(ar===v) return en; return v; }
-function kindLabel(k){ return LANG==="ar" ? (KIND_AR[k]||k) : k; }
+function catLabel(c){ return c||"Other"; }
+function catKey(input){ return input.trim(); }
+function kindLabel(k){ return k; }
 function typeLabel(ty){ return t("t_"+ty); }
-function locale(){ return LANG==="ar" ? "ar-IQ-u-nu-latn" : "en-GB"; }
+function locale(){ return "en-GB"; }
 function bdi(s){ return `<bdi>${esc(s)}</bdi>`; }
 
 const CATS = {
@@ -169,16 +98,16 @@ const CATS = {
 const DEC = {IQD:0, USD:2, GBP:2, EUR:2, TRY:2, AED:2};
 const CUR_ORDER = ["IQD","USD","GBP","EUR","TRY","AED"];
 const PRESETS = [
-  {en:"Cash wallet", ar:"محفظة نقدية", kind:"Cash", currency:"IQD"},
-  {en:"Dollar cash", ar:"نقد بالدولار", kind:"Cash", currency:"USD"},
-  {en:"Pound cash", ar:"نقد بالباوند", kind:"Cash", currency:"GBP"},
-  {en:"Qi Card", ar:"Qi Card", kind:"Prepaid card", currency:"IQD"},
-  {en:"RTB card", ar:"RTB card", kind:"Bank card", currency:"IQD"},
-  {en:"Apple Account balance", ar:"رصيد حساب Apple", kind:"Digital wallet", currency:"USD"},
-  {en:"Google Play balance", ar:"رصيد Google Play", kind:"Digital wallet", currency:"USD"},
-  {en:"ZainCash", ar:"زين كاش", kind:"Digital wallet", currency:"IQD"},
-  {en:"FIB", ar:"FIB", kind:"Bank card", currency:"IQD"},
-  {en:"Savings box", ar:"حصالة التوفير", kind:"Savings", currency:"IQD"}
+  {en:"Cash wallet", kind:"Cash", currency:"IQD"},
+  {en:"Dollar cash", kind:"Cash", currency:"USD"},
+  {en:"Pound cash", kind:"Cash", currency:"GBP"},
+  {en:"Qi Card", kind:"Prepaid card", currency:"IQD"},
+  {en:"RTB card", kind:"Bank card", currency:"IQD"},
+  {en:"Apple Account balance", kind:"Digital wallet", currency:"USD"},
+  {en:"Google Play balance", kind:"Digital wallet", currency:"USD"},
+  {en:"ZainCash", kind:"Digital wallet", currency:"IQD"},
+  {en:"FIB", kind:"Bank card", currency:"IQD"},
+  {en:"Savings box", kind:"Savings", currency:"IQD"}
 ];
 const ICONS = {
   "k-cash":'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
@@ -377,13 +306,10 @@ function entrySubHTML(e){
 /* ---------- static text + direction ---------- */
 function applyLang(){
   const r=document.documentElement;
-  r.lang = LANG; r.dir = LANG==="ar" ? "rtl" : "ltr";
+  r.lang = "en"; r.dir = "ltr";
   $$("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
   $$("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
   $$("[data-i18n-aria]").forEach(el=>el.setAttribute("aria-label",t(el.dataset.i18nAria)));
-  $("langLbl").textContent = t("langName");
-  $("brandMain").textContent = LANG==="ar" ? "دفتر" : "Daftar";
-  $("brandAlt").textContent = LANG==="ar" ? "Daftar" : "دفتر";
   [...$("aKind").options].forEach(o=>o.textContent=kindLabel(o.value));
   $$("[data-banner]").forEach(b=>{ b.textContent=S.banner?t(S.banner):""; b.hidden=!S.banner; });
   // refresh open forms
@@ -394,11 +320,7 @@ function applyLang(){
   if(!$("auth").hidden) setAuthMode(authMode);
   renderAll();
 }
-$("langBtn").addEventListener("click",()=>{
-  LANG = LANG==="ar" ? "en" : "ar";
-  try{ localStorage.setItem("daftar.lang",LANG); }catch(e){}
-  applyLang();
-});
+
 
 /* ---------- views ---------- */
 function setView(v){
@@ -1113,7 +1035,7 @@ function personDetail(pid){
     const c=curOf(e), d=debtDelta(e); run[c]=(run[c]||0)+d; const v=run[c];
     return `<tr class="tx" data-entry="${esc(e.id)}" tabindex="0"><td class="date">${esc(dshort(e.date))}</td><td>${esc(t("d_"+e.dir))}</td>
       <td>${e.account?bdi(acctName(e.account)):`<span class="hint">${esc(t("noCashShort"))}</span>`}</td><td class="rem">${bdi(e.note||"")}</td>
-      <td class="n ${d>0?"dr":"cr"}">${fmt(d,c,true)}</td><td class="n bal ${v<-1e-9?"neg":v>1e-9?"pos":""}">${fmt(v,c,true)}</td></tr>`;
+      <td class="n dr">${d>1e-9?nnum(d,c):""}</td><td class="n cr">${d<-1e-9?nnum(-d,c):""}</td><td class="n bal ${v<-1e-9?"neg":v>1e-9?"pos":""}">${nnum(v,c)}</td></tr>`;
   }).reverse().join("");
   const owesMe=Object.entries(pb).find(([c,v])=>v>1e-9), iOwe=Object.entries(pb).find(([c,v])=>v<-1e-9);
   return `<div class="card">
@@ -1126,7 +1048,7 @@ function personDetail(pid){
         <button class="btn small" type="button" data-debtfor="${esc(pid)}">${t("newDebt")}</button>
         <button class="btn small ghost" type="button" data-editperson="${esc(pid)}">${t("editPersonBtn")}</button>
       </div></div>
-    <div class="tbl-wrap"><table class="gl" style="min-width:680px"><thead><tr><th>${t("date")}</th><th>${t("what")}</th><th>${t("account")}</th><th>${t("note")}</th><th class="n">${t("amount")}</th><th class="n">${t("balance")}</th></tr></thead>
+    <div class="tbl-wrap"><table class="gl" style="min-width:720px"><thead><tr><th>${t("date")}</th><th>${t("what")}</th><th>${t("account")}</th><th>${t("note")}</th><th class="n">${t("debit")}</th><th class="n">${t("credit")}</th><th class="n">${t("balance")}</th></tr></thead>
       <tbody>${trs||`<tr><td colspan="6" class="empty">${esc(t("noDebtTx"))}</td></tr>`}</tbody></table></div>
     <div class="hint" style="padding:12px 18px">${esc(t("debtBalHint"))}</div>
   </div>`;
@@ -1136,17 +1058,12 @@ function personDetail(pid){
    every debt record, a running balance per currency and the closing "who owes whom". */
 const SOA_T={
   en:{title:"Statement of Account", between:"Between {a} and {b}", issued:"Issued {d}", period:"All transactions to {d}",
-    date:"Date", desc:"Description", by:"Paid by {n}", bal:"Balance",
+    date:"Date", desc:"Description", debit:"Debit", credit:"Credit", bal:"Balance",
     lent:"{a} lent {b}", borrowed:"{b} lent {a}", collected:"{b} paid back {a}", repaid:"{a} paid back {b}",
     owes:"{x} owes {y}", settled:"Settled, nobody owes anything", total:"Totals", closing:"Closing balance",
-    count:n=>n===1?"1 transaction":`${n} transactions`, made:"Made with Daftar", none:"No transactions recorded yet."},
-  ar:{title:"كشف حساب", between:"بين {a} و{b}", issued:"صدر في {d}", period:"جميع الحركات حتى {d}",
-    date:"التاريخ", desc:"البيان", by:"دفعه {n}", bal:"الرصيد",
-    lent:"{a} أقرض {b}", borrowed:"{b} أقرض {a}", collected:"{b} سدّد لـ{a}", repaid:"{a} سدّد لـ{b}",
-    owes:"{x} مدين لـ{y} بمبلغ", settled:"الحساب مسدَّد، لا ديون", total:"المجموع", closing:"الرصيد الختامي",
-    count:n=>n===1?"حركة واحدة":n===2?"حركتان":n<=10?`${n} حركات`:`${n} حركة`, made:"صُنع بتطبيق دفتر", none:"لا توجد حركات مسجلة بعد."}
+    count:n=>n===1?"1 transaction":`${n} transactions`, made:"Made with Ledger", note:"Debit increases what {b} owes you; credit reduces it.", none:"No transactions recorded yet."}
 };
-let soaLang=LANG, soaPid=null, soaCanvas=null;
+const soaLang="en"; let soaPid=null, soaCanvas=null;
 function st(k,v){ let s=SOA_T[soaLang][k]; if(typeof s==="function") return s(v); return v?s.replace(/\{(\w+)\}/g,(m,n)=>v[n]??m):s; }
 function myName(){ return (ME?.full_name||"").trim() || (ME?.email||"").split("@")[0] || "Me"; }
 // a = me, b = them. "given by me" grows what they owe; "given by them" shrinks it.
@@ -1229,7 +1146,7 @@ async function soaRender(d){
     x.fillStyle=C.soft; x.fillRect(P/2,y,W-P,48);
     const hf={font:F(600,17),color:C.muted};
     txt(st("date"),cols.date,y+31,hf); txt(st("desc"),cols.desc,y+31,hf);
-    txt(st("by",{n:firstName(d.a)}),cols.mine,y+31,{...hf,align:"end"}); txt(st("by",{n:firstName(d.b)}),cols.theirs,y+31,{...hf,align:"end"});
+    txt(st("debit"),cols.mine,y+31,{...hf,align:"end"}); txt(st("credit"),cols.theirs,y+31,{...hf,align:"end"});
     txt(st("bal"),cols.bal,y+31,{...hf,align:"end"});
     y+=48;
     g.rows.forEach(r=>{
@@ -1255,7 +1172,7 @@ async function soaRender(d){
   return cv;
 }
 async function openSOA(pid){
-  soaPid=pid; soaLang=LANG;
+  soaPid=pid;
   $$("#soaLang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.sl===soaLang?"true":"false"));
   $("soaPrev").innerHTML=`<div class="hint">${esc(t("loading"))}</div>`;
   openSheet("soaSheet"); await paintSOA();
@@ -1265,9 +1182,7 @@ async function paintSOA(){
   const img=new Image(); img.alt=st("title")+" · "+d.b; img.src=soaCanvas.toDataURL("image/png"); img.className="soa-img";
   $("soaPrev").replaceChildren(img);
 }
-function soaFileName(ext){ const b=(personById(soaPid)?.name||"person").replace(/[\\/:*?"<>|]+/g,"").trim(); return `${soaLang==="ar"?"كشف حساب":"Statement"} - ${b} - ${today()}.${ext}`; }
-$("soaLang").addEventListener("click",async e=>{ const b=e.target.closest("[data-sl]"); if(!b) return; soaLang=b.dataset.sl;
-  $$("#soaLang button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false")); await paintSOA(); });
+function soaFileName(ext){ const b=(personById(soaPid)?.name||"person").replace(/[\\/:*?"<>|]+/g,"").trim(); return `Statement - ${b} - ${today()}.${ext}`; }
 $("soaImg").addEventListener("click",async ()=>{
   if(!soaCanvas) return;
   const blob=await new Promise(r=>soaCanvas.toBlob(r,"image/png"));
@@ -1393,7 +1308,6 @@ function setAuthMode(m){
 function showAuth(on){ $("auth").hidden=!on; $("app").hidden=on; document.body.classList.toggle("authing",on); }
 $("authSwap").addEventListener("click",()=>setAuthMode(authMode==="in"?"up":"in"));
 $("authForgot").addEventListener("click",()=>setAuthMode("reset"));
-$("authLang").addEventListener("click",()=>$("langBtn").click());
 $("authForm").addEventListener("submit", async ev=>{
   ev.preventDefault(); authMsg("");
   if(!sb) return authMsg(t("noConfig"));
@@ -1422,11 +1336,9 @@ function openMe(){
   $("meName").textContent=ME.full_name||ME.email; $("meEmail").textContent=ME.email;
   $("meAvatar").textContent=[...(ME.full_name||ME.email||"?").trim()][0].toUpperCase();
   $("meFull").value=ME.full_name||""; $("meAdmin").hidden=ME.role!=="admin";
-  $("meLang").textContent=t("langName");
   openSheet("meSheet");
 }
 $("meBtn").addEventListener("click",openMe);
-$("meLang").addEventListener("click",()=>{ $("langBtn").click(); $("meLang").textContent=t("langName"); });
 $("meSave").addEventListener("click",async ()=>{
   const n=$("meFull").value.trim(); if(!n||S.demo) return;
   try{ await must(sb.from("profiles").update({full_name:n}).eq("id",ME.id)); ME.full_name=n; paintMe(); toast(t("personSaved")); }
